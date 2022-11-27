@@ -28,6 +28,6 @@
 /**
  * All external API natives are created here.
  */ 
-CreateGlobals()
+void CreateGlobals()
 {
 }

@@ -32,27 +32,27 @@
 /**
  * Parsed model data.
  */
-new ModelData[MODELS_MAX][ModelAttributes];
+ModelAttributes ModelData[MODELS_MAX];
 
 /**
  * Number of valid models.
  */
-new ModelCount;
+int ModelCount;
 
 
 /**
  * Prepare all model/download data.
  */
-ModelsLoad()
+void ModelsLoad()
 {
-    new Handle:kvModels = INVALID_HANDLE;
+    Handle kvModels = INVALID_HANDLE;
     
     // Register config file.
     ConfigRegisterConfig(File_Models, Structure_List, CONFIG_FILE_ALIAS_MODELS);
     
     // Get models file path.
-    decl String:modelPath[PLATFORM_MAX_PATH];
-    new bool:exists = ConfigGetCvarFilePath(CVAR_CONFIG_PATH_MODELS, modelPath);
+    char modelPath[PLATFORM_MAX_PATH];
+    bool exists = ConfigGetCvarFilePath(g_hCvarsList.CVAR_CONFIG_PATH_MODELS, modelPath);
     
     // If file doesn't exist, then log and stop.
     if (!exists)
@@ -80,17 +80,17 @@ ModelsLoad()
         LogEvent(false, LogType_Fatal, LOG_CORE_EVENTS, LogModule_Models, "Config Validation", "Can't find any models in \"%s\"", modelPath);
     }
     
-    decl String:buffer[256];
-    decl String:name[64];
-    decl String:path[PLATFORM_MAX_PATH];
-    decl String:team[64];
-    decl String:access[64];
-    decl String:group[64];
+    char buffer[256];
+    char name[64];
+    char path[PLATFORM_MAX_PATH];
+    char team[64];
+    char access[64];
+    char group[64];
     
     ModelCount = 0;
-    new failedCount;
-    new publicCount;
-    new downloadCount;
+    int failedCount;
+    int publicCount;
+    int downloadCount;
     
     // Loop through all models and store attributes in ModelData array.
     do
@@ -104,19 +104,19 @@ ModelsLoad()
         }
         
         KvGetString(kvModels, "name", name, sizeof(name));
-        strcopy(ModelData[ModelCount][Model_Name], 64, name);
+        strcopy(ModelData[ModelCount].Model_Name, 64, name);
         
         KvGetString(kvModels, "path", path, sizeof(path));
-        strcopy(ModelData[ModelCount][Model_Path], 64, path);
+        strcopy(ModelData[ModelCount].Model_Path, 64, path);
         
         KvGetString(kvModels, "team", team, sizeof(team));
-        ModelData[ModelCount][Model_Team] = ModelsStringToTeam(team);
+        ModelData[ModelCount].Model_Team = ModelsStringToTeam(team);
         
         KvGetString(kvModels, "access", access, sizeof(access));
-        ModelData[ModelCount][Model_Access] = ModelsStringToAccess(access);
+        ModelData[ModelCount].Model_Access = ModelsStringToAccess(access);
         
         KvGetString(kvModels, "group", group, sizeof(group));
-        strcopy(ModelData[ModelCount][Model_Group], 64, group);
+        strcopy(ModelData[ModelCount].Model_Group, 64, group);
         
         
         // Validate model attributes.
@@ -133,7 +133,7 @@ ModelsLoad()
         }
         
         // Validate team.
-        if (ModelData[ModelCount][Model_Team] == ModelTeam_Invalid)
+        if (ModelData[ModelCount].Model_Team == ModelTeam_Invalid)
         {
             LogEvent(false, LogType_Error, LOG_CORE_EVENTS, LogModule_Models, "Config Validation", "Warning: Invalid model team setting at index %d: \"%s\".", ModelCount + failedCount, team);
             failedCount++;
@@ -141,7 +141,7 @@ ModelsLoad()
         }
         
         // Validate access.
-        if (ModelData[ModelCount][Model_Access] == ModelAccess_Invalid)
+        if (ModelData[ModelCount].Model_Access == ModelAccess_Invalid)
         {
             LogEvent(false, LogType_Error, LOG_CORE_EVENTS, LogModule_Models, "Config Validation", "Warning: Invalid model access setting at index %d: \"%s\".", ModelCount + failedCount, access);
             failedCount++;
@@ -150,14 +150,14 @@ ModelsLoad()
         else
         {
             // Increment public model counter for the current team.
-            if (ModelData[ModelCount][Model_Access] == ModelAccess_Public)
+            if (ModelData[ModelCount].Model_Access == ModelAccess_Public)
             {
                 publicCount++;
             }
         }
         
         // Validate group.
-        if (ModelData[ModelCount][Model_Access] == ModelAccess_Group &&
+        if (ModelData[ModelCount].Model_Access == ModelAccess_Group &&
             FindAdmGroup(group) == INVALID_GROUP_ID)
         {
             LogEvent(false, LogType_Error, LOG_CORE_EVENTS, LogModule_Models, "Config Validation", "Warning: Invalid model group setting at index %d. Couldn't find SourceMod group \"%s\".", ModelCount + failedCount, group);
@@ -166,7 +166,7 @@ ModelsLoad()
         }
         
         // Open directory with model files.
-        new Handle:dir = OpenDirectory(path);
+        Handle dir = OpenDirectory(path);
         
         // Check if failed.
         if (dir == INVALID_HANDLE)
@@ -178,9 +178,9 @@ ModelsLoad()
         // Reset file counter for the current model.
         downloadCount = 0;
         
-        new FileType:type;
-        decl String:file[64];
-        decl String:fileShort[64];
+        FileType type;
+        char file[64];
+        char fileShort[64];
         
         // Search for model files with the specified name and add them to
         // downloads table.
@@ -194,7 +194,7 @@ ModelsLoad()
             
             // Find break point index in the string to get model name.
             // Add one to make space for null terminator.
-            new breakpoint = FindCharInString(file, '.') + 1;
+            int breakpoint = FindCharInString(file, '.') + 1;
             strcopy(fileShort, breakpoint, file);
             
             // If this file doesn't match model name, then skip it.
@@ -246,7 +246,7 @@ ModelsLoad()
 /**
  * Called when config is being reloaded.
  */
-public ModelsOnConfigReload(ConfigFile:config)
+public void ModelsOnConfigReload(ConfigFile config)
 {
     // Reload models config.
     ModelsLoad();
@@ -255,12 +255,12 @@ public ModelsOnConfigReload(ConfigFile:config)
 /**
  * Precaches all models.
  */
-ModelsPrecache()
+void ModelsPrecache()
 {
-    decl String:file[PLATFORM_MAX_PATH];
+    char file[PLATFORM_MAX_PATH];
 
     // Loop through all models, build full path and cache them.
-    for (new model = 0; model < ModelCount; model++)
+    for (int model = 0; model < ModelCount; model++)
     {
         ModelsGetFullPath(model, file, sizeof(file));
         PrecacheModel(file);
@@ -281,13 +281,13 @@ ModelsPrecache()
  *                              Default is MODEL_ACCESS_PUBLIC.
  * @return              Random model index according to filter, or -1 on error.
  */
-ModelsGetRandomModel(client = -1, ModelTeam:teamFilter = ModelTeam_Zombies, accessRequireFlags = MODEL_ACCESS_PUBLIC)
+int ModelsGetRandomModel(int client = -1, ModelTeam teamFilter = ModelTeam_Zombies, int accessRequireFlags = MODEL_ACCESS_PUBLIC)
 {
-    decl modelIndexes[MODELS_MAX];
-    new listCount;
+    int modelIndexes[MODELS_MAX];
+    int listCount;
     
     // Loop through all models.
-    for (new index = 0; index < ModelCount; index++)
+    for (int index = 0; index < ModelCount; index++)
     {
         // Check team filtering. Skip if no match.
         if (teamFilter != ModelTeam_Invalid &&
@@ -297,8 +297,8 @@ ModelsGetRandomModel(client = -1, ModelTeam:teamFilter = ModelTeam_Zombies, acce
         }
         
         // Cache current model access flag.
-        new ModelAccess:access = ModelsGetAccess(index);
-        new accessFlag = ModelsGetAccessFlag(access);
+        ModelAccess access = ModelsGetAccess(index);
+        int accessFlag = ModelsGetAccessFlag(access);
         
         // Check access filtering. Skip if no match.
         if (accessRequireFlags > 0 &&
@@ -313,7 +313,7 @@ ModelsGetRandomModel(client = -1, ModelTeam:teamFilter = ModelTeam_Zombies, acce
             // Check if current model use group authentication.
             if (access == ModelAccess_Group)
             {
-                decl String:group[64];
+                char group[64];
                 ModelsGetGroup(index, group, sizeof(group));
                 
                 if (!ZRIsClientInGroup(client, group))
@@ -360,9 +360,9 @@ ModelsGetRandomModel(client = -1, ModelTeam:teamFilter = ModelTeam_Zombies, acce
  *                      is false, check if in use.
  * @return              True if valid, false otherwise.
  */
-bool:ModelsIsValidIndex(index, bool:rangeOnly = false)
+bool ModelsIsValidIndex(int index, bool rangeOnly = false)
 {
-    new bool:rangeValid = (index >= 0 && index < MODELS_MAX);
+    bool rangeValid = (index >= 0 && index < MODELS_MAX);
     
     if (rangeOnly)
     {
@@ -384,7 +384,7 @@ bool:ModelsIsValidIndex(index, bool:rangeOnly = false)
  * @param maxlen    Size of buffer.
  * @return          Number of cells written, or -1 on error.
  */
-ModelsGetName(index, String:buffer[], maxlen)
+int ModelsGetName(int index, char[] buffer, int maxlen)
 {
     // Validate index.
     if (!ModelsIsValidIndex(index))
@@ -392,7 +392,7 @@ ModelsGetName(index, String:buffer[], maxlen)
         return -1;
     }
     
-    return strcopy(buffer, maxlen, ModelData[index][Model_Name]);
+    return strcopy(buffer, maxlen, ModelData[index].Model_Name);
 }
 
 /**
@@ -403,7 +403,7 @@ ModelsGetName(index, String:buffer[], maxlen)
  * @param maxlen    Size of buffer.
  * @return          Number of cells written, or -1 on error.
  */
-ModelsGetPath(index, String:buffer[], maxlen)
+int ModelsGetPath(int index, char[] buffer, int maxlen)
 {
     // Validate index.
     if (!ModelsIsValidIndex(index))
@@ -411,7 +411,7 @@ ModelsGetPath(index, String:buffer[], maxlen)
         return -1;
     }
     
-    return strcopy(buffer, maxlen, ModelData[index][Model_Path]);
+    return strcopy(buffer, maxlen, ModelData[index].Model_Path);
 }
 
 /**
@@ -420,7 +420,7 @@ ModelsGetPath(index, String:buffer[], maxlen)
  * @param index     Model index.
  * @return          Team for the specified model, ModelTeam_Invalid on error.
  */
-ModelTeam:ModelsGetTeam(index)
+ModelTeam ModelsGetTeam(int index)
 {
     // Validate index.
     if (!ModelsIsValidIndex(index))
@@ -428,7 +428,7 @@ ModelTeam:ModelsGetTeam(index)
         return ModelTeam_Invalid;
     }
     
-    return ModelData[index][Model_Team];
+    return ModelData[index].Model_Team;
 }
 
 /**
@@ -438,7 +438,7 @@ ModelTeam:ModelsGetTeam(index)
  * @return          Access setting for the specified model, ModelAccess_Invalid
  *                  on error.
  */
-ModelAccess:ModelsGetAccess(index)
+ModelAccess ModelsGetAccess(int index)
 {
     // Validate index.
     if (!ModelsIsValidIndex(index))
@@ -446,7 +446,7 @@ ModelAccess:ModelsGetAccess(index)
         return ModelAccess_Invalid;
     }
     
-    return ModelData[index][Model_Access];
+    return ModelData[index].Model_Access;
 }
 
 /**
@@ -455,7 +455,7 @@ ModelAccess:ModelsGetAccess(index)
  * @param access    Access setting to convert.
  * @return          Access flag, or 0 on error.
  */
-ModelsGetAccessFlag(ModelAccess:access)
+int ModelsGetAccessFlag(ModelAccess access)
 {
     switch (access)
     {
@@ -493,7 +493,7 @@ ModelsGetAccessFlag(ModelAccess:access)
  * @param maxlen    Size of buffer.
  * @return          Number of cells written, or -1 on error.
  */
-ModelsGetGroup(index, String:buffer[], maxlen)
+int ModelsGetGroup(int index, char[] buffer, int maxlen)
 {
     // Validate index.
     if (!ModelsIsValidIndex(index))
@@ -501,7 +501,7 @@ ModelsGetGroup(index, String:buffer[], maxlen)
         return -1;
     }
     
-    return strcopy(buffer, maxlen, ModelData[index][Model_Group]);
+    return strcopy(buffer, maxlen, ModelData[index].Model_Group);
 }
 
 /**
@@ -512,10 +512,10 @@ ModelsGetGroup(index, String:buffer[], maxlen)
  * @param maxlen    Size of buffer.
  * @return          Number of cells written, or -1 on error.
  */
-ModelsGetFullPath(index, String:buffer[], maxlen)
+void ModelsGetFullPath(int index, char[] buffer, int maxlen)
 {
-    decl String:path[PLATFORM_MAX_PATH];
-    decl String:name[64];
+    char path[PLATFORM_MAX_PATH];
+    char name[64];
     
     ModelsGetPath(index, path, sizeof(path));
     ModelsGetName(index, name, sizeof(name));
@@ -533,7 +533,7 @@ ModelsGetFullPath(index, String:buffer[], maxlen)
  * @param team  String to convert.
  * @return      Team setting, or ModelTeam_Invalid on error.
  */
-ModelTeam:ModelsStringToTeam(const String:team[])
+ModelTeam ModelsStringToTeam(const char[] team)
 {
     if (StrEqual(team, "zombies", false))
     {
@@ -553,7 +553,7 @@ ModelTeam:ModelsStringToTeam(const String:team[])
  * @param teamid    Class team ID.
  * @return          Team setting, or ModelTeam_Invalid on error.
  */
-ModelTeam:ModelsTeamIdToTeam(teamid)
+ModelTeam ModelsTeamIdToTeam(int teamid)
 {
     switch (teamid)
     {
@@ -576,7 +576,7 @@ ModelTeam:ModelsTeamIdToTeam(teamid)
  * @param access    String to convert.
  * @return          Access setting, or ModelAccess_Invalid on error.
  */
-ModelAccess:ModelsStringToAccess(const String:access[])
+ModelAccess ModelsStringToAccess(const char[] access)
 {
     if (StrEqual(access, "public", false))
     {

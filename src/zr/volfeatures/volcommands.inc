@@ -53,7 +53,7 @@ Example:
 /**
  * Creates commands for managing volumes.
  */
-VolOnCommandsCreate()
+void VolOnCommandsCreate()
 {
     RegConsoleCmd("zr_vol_add", VolAddVolumeCommand, "Creates a rectangular volume in the map. Usage: zr_vol_add <x1> <y1> <z1> <x2> <y2> <z2> <type> [params]");
     RegConsoleCmd("zr_vol_remove", VolRemoveVolumeCommand, "Removes an existing volume in the map. Usage: zr_vol_remove <volume index>");
@@ -64,9 +64,9 @@ VolOnCommandsCreate()
 /**
  * Command callback for creating a new volume.
  */
-public Action:VolAddVolumeCommand(client, argc)
+public Action VolAddVolumeCommand(int client, int argc)
 {
-    decl String:buffer[640];
+    char buffer[640];
     buffer[0] = 0;
     
     // Check if privileged.
@@ -97,22 +97,22 @@ public Action:VolAddVolumeCommand(client, argc)
         return Plugin_Handled;
     }
     
-    new Float:x1;
-    new Float:y1;
-    new Float:z1;
-    new Float:x2;
-    new Float:y2;
-    new Float:z2;
-    new Float:min[3];
-    new Float:max[3];
-    new VolumeFeatureTypes:voltype;
-    new Float:floatbuffer;
-    new volindex;
-    new dataindex;
-    new paramcount;
+    float x1;
+    float y1;
+    float z1;
+    float x2;
+    float y2;
+    float z2;
+    float min[3];
+    float max[3];
+    VolumeFeatureTypes voltype;
+    float floatbuffer;
+    int volindex;
+    int dataindex;
+    int paramcount;
     
-    decl String:params[512];
-    decl String:argbuffer[256];
+    char params[512];
+    char argbuffer[256];
     
     params[0] = 0;
     
@@ -217,7 +217,7 @@ public Action:VolAddVolumeCommand(client, argc)
     if (argc >= 8)
     {
         // Join the last parameters in a string.
-        for (new arg = 8; arg <= argc; arg++)
+        for (int arg = 8; arg <= argc; arg++)
         {
             GetCmdArg(arg, argbuffer, sizeof(argbuffer));
             StrCat(params, sizeof(params), argbuffer);
@@ -257,10 +257,10 @@ public Action:VolAddVolumeCommand(client, argc)
 /**
  * Command callback for removing a volume.
  */
-public Action:VolRemoveVolumeCommand(client, argc)
+public Action VolRemoveVolumeCommand(int client, int argc)
 {
-    decl String:arg[16];
-    new volindex;
+    char arg[16];
+    int volindex;
     
     // Check if privileged.
     if (!ZRIsClientPrivileged(client, OperationType_Configuration))
@@ -288,7 +288,7 @@ public Action:VolRemoveVolumeCommand(client, argc)
     }
     
     // Check if volume exist.
-    if (!Volumes[volindex][Vol_InUse])
+    if (!Volumes[volindex].Vol_InUse)
     {
         ReplyToCommand(client, "Volume %d doesn't exist.", volindex);
         return Plugin_Handled;
@@ -304,19 +304,19 @@ public Action:VolRemoveVolumeCommand(client, argc)
 /**
  * Command callback for listing volumes or dumping data.
  */
-public Action:VolListCommand(client, argc)
+public Action VolListCommand(int client, int argc)
 {
-    decl String:buffer[1022];       // Two chars reserved for newline and null terminator.
-    decl String:linebuffer[128];
-    decl String:valuebuffer[32];
-    decl String:arg[16];
+    char buffer[1022];       // Two chars reserved for newline and null terminator.
+    char linebuffer[128];
+    char valuebuffer[32];
+    char arg[16];
     
     buffer[0] = 0;
     linebuffer[0] = 0;
     
-    new volindex;
-    new volcount;
-    new volcache[VolumeAttributes];
+    int volindex;
+    int volcount;
+    VolumeAttributes volcache;
     
     if (argc < 1)
     {
@@ -330,22 +330,22 @@ public Action:VolListCommand(client, argc)
         for (volindex = 0; volindex < ZR_VOLUMES_MAX; volindex++)
         {
             // Check if in use.
-            if (Volumes[volindex][Vol_InUse])
+            if (Volumes[volindex].Vol_InUse)
             {
                 // Cache volume data.
                 volcache = Volumes[volindex];
                 
                 // Add to list.
-                VolTypeToString(volcache[Vol_Type], valuebuffer, sizeof(valuebuffer), true);
+                VolTypeToString(volcache.Vol_Type, valuebuffer, sizeof(valuebuffer), true);
                 Format(linebuffer, sizeof(linebuffer), "%-4d %-15s %-8.2f %-8.2f %-8.2f      %-8.2f %-8.2f %-8.2f",
                     volindex,
                     valuebuffer,
-                    volcache[Vol_xMin],
-                    volcache[Vol_yMin],
-                    volcache[Vol_zMin],
-                    volcache[Vol_xMax],
-                    volcache[Vol_yMax],
-                    volcache[Vol_zMax]);
+                    volcache.Vol_xMin,
+                    volcache.Vol_yMin,
+                    volcache.Vol_zMin,
+                    volcache.Vol_xMax,
+                    volcache.Vol_yMax,
+                    volcache.Vol_zMax);
                 
                 ReplyToCommand(client, linebuffer);
                 volcount++;
@@ -393,31 +393,31 @@ public Action:VolListCommand(client, argc)
         Format(linebuffer, sizeof(linebuffer), "ID:                 %d\n", volindex);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
-        Format(linebuffer, sizeof(linebuffer), "Enabled:            %d\n", volcache[Vol_Enabled]);
+        Format(linebuffer, sizeof(linebuffer), "Enabled:            %d\n", volcache.Vol_Enabled);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
-        VolTypeToString(volcache[Vol_Type], valuebuffer, sizeof(valuebuffer));
+        VolTypeToString(volcache.Vol_Type, valuebuffer, sizeof(valuebuffer));
         Format(linebuffer, sizeof(linebuffer), "Type:               %s\n", valuebuffer);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
-        Format(linebuffer, sizeof(linebuffer), "Min loc:            %-8.2f %-8.2f %-8.2f\n", volcache[Vol_xMin], volcache[Vol_yMin], volcache[Vol_zMin]);
+        Format(linebuffer, sizeof(linebuffer), "Min loc:            %-8.2f %-8.2f %-8.2f\n", volcache.Vol_xMin, volcache.Vol_yMin, volcache.Vol_zMin);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
-        Format(linebuffer, sizeof(linebuffer), "Max loc:            %-8.2f %-8.2f %-8.2f\n", volcache[Vol_xMax], volcache[Vol_yMax], volcache[Vol_zMax]);
+        Format(linebuffer, sizeof(linebuffer), "Max loc:            %-8.2f %-8.2f %-8.2f\n", volcache.Vol_xMax, volcache.Vol_yMax, volcache.Vol_zMax);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
-        VolEffectToString(volcache[Vol_Effect], valuebuffer, sizeof(valuebuffer));
+        VolEffectToString(volcache.Vol_Effect, valuebuffer, sizeof(valuebuffer));
         Format(linebuffer, sizeof(linebuffer), "Effect:             %s\n", valuebuffer);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
-        Format(linebuffer, sizeof(linebuffer), "Effect color:       %d, %d, %d\n", volcache[Vol_EffectColor][0], volcache[Vol_EffectColor][1], volcache[Vol_EffectColor][2]);
+        Format(linebuffer, sizeof(linebuffer), "Effect color:       %d, %d, %d\n", volcache.Vol_EffectColor[0], volcache.Vol_EffectColor[1], volcache.Vol_EffectColor[2]);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
-        VolTeamToString(volcache[Vol_TeamFilter], valuebuffer, sizeof(valuebuffer));
+        VolTeamToString(volcache.Vol_TeamFilter, valuebuffer, sizeof(valuebuffer));
         Format(linebuffer, sizeof(linebuffer), "Team filter:        %s\n", valuebuffer);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
-        Format(linebuffer, sizeof(linebuffer), "Trigger delay:      %.2f", volcache[Vol_TriggerDelay]);
+        Format(linebuffer, sizeof(linebuffer), "Trigger delay:      %.2f", volcache.Vol_TriggerDelay);
         StrCat(buffer, sizeof(buffer), linebuffer);
         
         // Print generic attributes.
@@ -427,15 +427,15 @@ public Action:VolListCommand(client, argc)
         buffer[0] = 0;
         
         // Get type spesific attributes.
-        switch (volcache[Vol_Type])
+        switch (volcache.Vol_Type)
         {
             case VolFeature_Anticamp:
             {
-                VolAnticampDumpData(volcache[Vol_DataIndex], buffer, sizeof(buffer));
+                VolAnticampDumpData(volcache.Vol_DataIndex, buffer, sizeof(buffer));
             }
             case VolFeature_ClassEdit:
             {
-                VolClassEditDumpData(volcache[Vol_DataIndex], buffer, sizeof(buffer));
+                VolClassEditDumpData(volcache.Vol_DataIndex, buffer, sizeof(buffer));
             }
         }
         
@@ -449,10 +449,10 @@ public Action:VolListCommand(client, argc)
     }
 }
 
-public Action:VolDumpStatesCommand(client, argc)
+public Action VolDumpStatesCommand(int client, int argc)
 {
-    decl String:target[64];
-    new targetclient;
+    char target[64];
+    int targetclient;
     
     // Check if privileged.
     if (!ZRIsClientPrivileged(client, OperationType_Generic))
@@ -482,14 +482,14 @@ public Action:VolDumpStatesCommand(client, argc)
     ReplyToCommand(client, "Volume ID:  Player in volume:\n----------------------------------------");
     
     // Get player states.
-    new bool:statebuffer[ZR_VOLUMES_MAX];
+    bool statebuffer[ZR_VOLUMES_MAX];
     VolGetPlayerStates(targetclient, statebuffer, sizeof(statebuffer));
     
     // Set language.
     SetGlobalTransTarget(client);
     
     // Loop through each volume.
-    for (new volumeindex = 0; volumeindex < ZR_VOLUMES_MAX; volumeindex++)
+    for (int volumeindex = 0; volumeindex < ZR_VOLUMES_MAX; volumeindex++)
     {
         // Check if volume is in use.
         if (VolInUse(volumeindex))
@@ -515,7 +515,7 @@ public Action:VolDumpStatesCommand(client, argc)
  *
  * @return              The new volume index, or -1 if failed.
  */
-VolAdd(volumeIndex = -1, Float:locMin[3], Float:locMax[3], VolumeFeatureTypes:volumeType, dataIndex)
+int VolAdd(int volumeIndex = -1, float locMin[3], float locMax[3], VolumeFeatureTypes volumeType, int dataIndex)
 {
     if (volumeIndex < 0)
     {
@@ -527,21 +527,21 @@ VolAdd(volumeIndex = -1, Float:locMin[3], Float:locMax[3], VolumeFeatureTypes:vo
     if (VolIsValidIndex(volumeIndex))
     {
         // Mark volume as enabled and in use.
-        Volumes[volumeIndex][Vol_Enabled] = true;
-        Volumes[volumeIndex][Vol_InUse] = true;
+        Volumes[volumeIndex].Vol_Enabled = true;
+        Volumes[volumeIndex].Vol_InUse = true;
         
         // Set location data.
-        Volumes[volumeIndex][Vol_xMin] = locMin[0];
-        Volumes[volumeIndex][Vol_yMin] = locMin[1];
-        Volumes[volumeIndex][Vol_zMin] = locMin[2];
+        Volumes[volumeIndex].Vol_xMin = locMin[0];
+        Volumes[volumeIndex].Vol_yMin = locMin[1];
+        Volumes[volumeIndex].Vol_zMin = locMin[2];
         
-        Volumes[volumeIndex][Vol_xMax] = locMax[0];
-        Volumes[volumeIndex][Vol_yMax] = locMax[1];
-        Volumes[volumeIndex][Vol_zMax] = locMax[2];
+        Volumes[volumeIndex].Vol_xMax = locMax[0];
+        Volumes[volumeIndex].Vol_yMax = locMax[1];
+        Volumes[volumeIndex].Vol_zMax = locMax[2];
         
         // Set type.
-        Volumes[volumeIndex][Vol_Type] = volumeType;
-        Volumes[volumeIndex][Vol_DataIndex] = dataIndex;
+        Volumes[volumeIndex].Vol_Type = volumeType;
+        Volumes[volumeIndex].Vol_DataIndex = dataIndex;
         
         // Update number of volumes.
         VolumeCount++;
@@ -562,7 +562,7 @@ VolAdd(volumeIndex = -1, Float:locMin[3], Float:locMax[3], VolumeFeatureTypes:vo
  * @param volumeIndex   The volume index.
  * @return              True if successful, false otherwise.
  */
-bool:VolRemove(volumeIndex)
+bool VolRemove(int volumeIndex)
 {
     // Validate index.
     if (VolIsValidIndex(volumeIndex))
@@ -571,11 +571,11 @@ bool:VolRemove(volumeIndex)
         VolOnDisabled(volumeIndex);
         
         // Clear feature data.
-        switch (Volumes[volumeIndex][Vol_Type])
+        switch (Volumes[volumeIndex].Vol_Type)
         {
             case VolFeature_Anticamp:
             {
-                VolAnticampReset(Volumes[volumeIndex][Vol_DataIndex]);
+                VolAnticampReset(Volumes[volumeIndex].Vol_DataIndex);
             }
         }
         
@@ -596,28 +596,28 @@ bool:VolRemove(volumeIndex)
  *
  * @param volumeIndex   The volume index.
  */
-VolClear(volumeIndex)
+void VolClear(int volumeIndex)
 {
-    Volumes[volumeIndex][Vol_Enabled] = false;
-    Volumes[volumeIndex][Vol_InUse] = false;
+    Volumes[volumeIndex].Vol_Enabled = false;
+    Volumes[volumeIndex].Vol_InUse = false;
     
-    Volumes[volumeIndex][Vol_xMin] = 0.0;
-    Volumes[volumeIndex][Vol_yMin] = 0.0;
-    Volumes[volumeIndex][Vol_zMin] = 0.0;
+    Volumes[volumeIndex].Vol_xMin = 0.0;
+    Volumes[volumeIndex].Vol_yMin = 0.0;
+    Volumes[volumeIndex].Vol_zMin = 0.0;
     
-    Volumes[volumeIndex][Vol_xMax] = 0.0;
-    Volumes[volumeIndex][Vol_yMax] = 0.0;
-    Volumes[volumeIndex][Vol_zMax] = 0.0;
+    Volumes[volumeIndex].Vol_xMax = 0.0;
+    Volumes[volumeIndex].Vol_yMax = 0.0;
+    Volumes[volumeIndex].Vol_zMax = 0.0;
     
-    Volumes[volumeIndex][Vol_Effect] = VolEffect_None;
-    Volumes[volumeIndex][Vol_EffectColor][0] = 0;
-    Volumes[volumeIndex][Vol_EffectColor][1] = 0;
-    Volumes[volumeIndex][Vol_EffectColor][2] = 0;
+    Volumes[volumeIndex].Vol_Effect = VolEffect_None;
+    Volumes[volumeIndex].Vol_EffectColor[0] = 0;
+    Volumes[volumeIndex].Vol_EffectColor[1] = 0;
+    Volumes[volumeIndex].Vol_EffectColor[2] = 0;
     
-    new dataindex = Volumes[volumeIndex][Vol_DataIndex];
+    int dataindex = Volumes[volumeIndex].Vol_DataIndex;
     if (dataindex >= 0)
     {
-        switch (Volumes[volumeIndex][Vol_Type])
+        switch (Volumes[volumeIndex].Vol_Type)
         {
             case VolFeature_Anticamp:
             {
@@ -630,19 +630,19 @@ VolClear(volumeIndex)
         }
     }
     
-    Volumes[volumeIndex][Vol_Type] = VolFeature_Invalid;
-    Volumes[volumeIndex][Vol_DataIndex] = -1;
+    Volumes[volumeIndex].Vol_Type = VolFeature_Invalid;
+    Volumes[volumeIndex].Vol_DataIndex = -1;
     
-    Volumes[volumeIndex][Vol_TeamFilter] = VolTeam_All;
-    Volumes[volumeIndex][Vol_TriggerDelay] = 0.0;
+    Volumes[volumeIndex].Vol_TeamFilter = VolTeam_All;
+    Volumes[volumeIndex].Vol_TriggerDelay = 0.0;
 }
 
 /**
  * Clears all volumes.
  */
-VolClearAll()
+void VolClearAll()
 {
-    for (new volindex = 0; volindex < ZR_VOLUMES_MAX; volindex++)
+    for (int volindex = 0; volindex < ZR_VOLUMES_MAX; volindex++)
     {
         VolClear(volindex);
     }
@@ -656,14 +656,14 @@ VolClearAll()
  *                      format.
  * @return              Number of successful attributes set, -1 on error.
  */
-VolSetAttributes(volumeIndex, const String:attributes[])
+int VolSetAttributes(int volumeIndex, const char[] attributes)
 {
-    new attribCount;
-    new successfulCount;
-    new VolumeFeatureTypes:voltype;
+    int attribCount;
+    int successfulCount;
+    VolumeFeatureTypes voltype;
     new dataindex;
-    decl String:attribName[64];
-    decl String:attribValue[256];
+    char attribName[64];
+    char attribValue[256];
     
     // Validate volume index.
     if (!VolIsValidIndex(volumeIndex))
@@ -681,13 +681,13 @@ VolSetAttributes(volumeIndex, const String:attributes[])
     }
     
     // Get volumetric feature type.
-    voltype = Volumes[volumeIndex][Vol_Type];
+    voltype = Volumes[volumeIndex].Vol_Type;
     
     // Get feature data index.
-    dataindex = Volumes[volumeIndex][Vol_DataIndex];
+    dataindex = Volumes[volumeIndex].Vol_DataIndex;
     
     // Loop through all attributes.
-    for (new attrib = 0; attrib < attribCount; attrib++)
+    for (int attrib = 0; attrib < attribCount; attrib++)
     {
         // Get attribute name.
         GetParameterName(attribName, sizeof(attribName), attributes, attrib);

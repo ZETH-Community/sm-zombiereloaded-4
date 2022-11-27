@@ -25,7 +25,7 @@
  * ============================================================================
  */
 
-DebugOnCommandsCreate()
+void DebugOnCommandsCreate()
 {
     // Custom test commands:
     /*

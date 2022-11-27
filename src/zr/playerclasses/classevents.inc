@@ -28,7 +28,7 @@
 /**
  * Keeps track of if a client has been authorized as an admin.
  */
-new bool:g_bAdminChecked[MAXPLAYERS + 1];
+bool g_bAdminChecked[MAXPLAYERS + 1];
 
 /* ------------------------------------
  *
@@ -40,7 +40,7 @@ new bool:g_bAdminChecked[MAXPLAYERS + 1];
 /**
  * Create class-related cookies here.
  */
-ClassOnCookiesCreate()
+void ClassOnCookiesCreate()
 {
     // Forward event to sub-modules.
     ClassOverlayOnCookiesCreate();
@@ -63,7 +63,7 @@ ClassOnCookiesCreate()
 /**
  * Called when all modules are done loading.
  */
-ClassOnModulesLoaded()
+void ClassOnModulesLoaded()
 {
     // Set default classes on all player slots.
     ClassClientSetDefaultIndexes();
@@ -73,7 +73,7 @@ ClassOnModulesLoaded()
  * Called when map is loading, before configs are loaded. Used for
  * initializing class module.
  */
-ClassOnMapStart()
+void ClassOnMapStart()
 {
 	// Clear multipliers.
 	ClassResetMultiplierCache();
@@ -85,9 +85,9 @@ ClassOnMapStart()
 /**
  * Called when all configs are executed.
  */
-ClassOnConfigsExecuted()
+void ClassOnConfigsExecuted()
 {
-    new ClassSpeedMethods:speedMethod = ClassGetSpeedMethod();
+    ClassSpeedMethods speedMethod = ClassGetSpeedMethod();
     
     if (speedMethod != ClassSpeed_Invalid)
     {
@@ -98,14 +98,14 @@ ClassOnConfigsExecuted()
     {
         // Fall back on default to avoid errors.
         ClassSpeedMethod = ClassSpeed_Prop;
-        LogEvent(false, LogType_Error, LOG_CORE_EVENTS, LogModules:LogModule_Playerclasses, "Config validation", "Warning: Invalid value in zr_classes_speed_method. Using default value.");
+        LogEvent(false, LogType_Error, LOG_CORE_EVENTS, view_as<LogModules>(LogModule_Playerclasses), "Config validation", "Warning: Invalid value in zr_classes_speed_method. Using default value.");
     }
 }
 
 /**
  * Client has just connected to the server.
  */
-ClassOnClientConnected(client)
+void ClassOnClientConnected(int client)
 {
     // Unhook "PreThinkPost" on the client.
     SDKUnhook(client, SDKHook_PreThinkPost, ClassPreThinkPost);
@@ -117,7 +117,7 @@ ClassOnClientConnected(client)
 /**
  * Called when a client connects to the server (OnClientPutInServer).
  */
-ClassClientInit(client)
+void ClassClientInit(int client)
 {
     // Hook "PreThinkPost" on the client.
     SDKHook(client, SDKHook_PreThinkPost, ClassPreThinkPost);
@@ -136,7 +136,7 @@ ClassClientInit(client)
  * @param client		Client index.
  * @noreturn
  */
-ClassOnClientPostAdminCheck(client)
+void ClassOnClientPostAdminCheck(int client)
 {
     // Client has been checked.
     g_bAdminChecked[client] = true;
@@ -158,7 +158,7 @@ ClassOnClientPostAdminCheck(client)
  * 
  * @param client		Client index.
  */
-ClassOnCookiesCached(client)
+void ClassOnCookiesCached(int client)
 {
     // Check if classes are loaded successfully.
     if (ClassValidated)
@@ -182,7 +182,7 @@ ClassOnCookiesCached(client)
 /**
  * Called a client disconnects.
  */
-ClassOnClientDisconnect(client)
+void ClassOnClientDisconnect(client)
 {
     // Disable class attributes with timers.
     ClassHealthRegenStop(client);
@@ -196,11 +196,11 @@ ClassOnClientDisconnect(client)
  * 
  * @param client    The client index.
  */
-ClassOnClientSpawn(client)
+void ClassOnClientSpawn(int client)
 {
-    decl String:originalmodel[PLATFORM_MAX_PATH];
-    decl String:classname[64];
-    new filter[ClassFilter];
+    char originalmodel[PLATFORM_MAX_PATH];
+    char classname[64];
+    ClassFilter filter;
     
     // Check if the player is dead. Spawning into the game is also a event in
     // the connection process.
@@ -241,7 +241,7 @@ ClassOnClientSpawn(client)
         ClassPlayerInAdminMode[client] = false;
         
         // Get random class setting.
-        new bool:randomclass = GetConVarBool(g_hCvarsList[CVAR_CLASSES_RANDOM]);
+        bool randomclass = GetConVarBool(g_hCvarsList.CVAR_CLASSES_RANDOM);
         
         // Assign random classes if enabled. Always do it for bots.
         if (randomclass || IsFakeClient(client))
@@ -250,20 +250,20 @@ ClassOnClientSpawn(client)
             // ---------------
             
             // Exclude special class flags like mother zombies and admin classes.
-            filter[ClassFilter_DenyFlags] = ZR_CLASS_SPECIALFLAGS;
+            filter.ClassFilter_DenyFlags = ZR_CLASS_SPECIALFLAGS;
                         
             // Allow admin classes if admin.
-            filter[ClassFilter_DenyFlags] -= ZRIsClientAdmin(client) ? ZR_CLASS_FLAG_ADMIN_ONLY : 0;
+            filter.ClassFilter_DenyFlags -= ZRIsClientAdmin(client) ? ZR_CLASS_FLAG_ADMIN_ONLY : 0;
             
             // Specify client for checking group permissions.
-            filter[ClassFilter_Client] = client;
+            filter.ClassFilter_Client = client;
             
             // Get classes
             // -----------
             
             // Get random classes for each type.
-            new randomzombie = ClassGetRandomClass(ZR_CLASS_TEAM_ZOMBIES, filter);
-            new randomhuman = ClassGetRandomClass(ZR_CLASS_TEAM_HUMANS, filter);
+            int randomzombie = ClassGetRandomClass(ZR_CLASS_TEAM_ZOMBIES, filter);
+            int randomhuman = ClassGetRandomClass(ZR_CLASS_TEAM_HUMANS, filter);
             
             // Set selected zombie class index.
             ClassSelected[client][ZR_CLASS_TEAM_ZOMBIES] = randomzombie;
@@ -277,8 +277,8 @@ ClassOnClientSpawn(client)
         }
         
         // Display class menu if either menu cvar is set.
-        new bool:menuspawn = GetConVarBool(g_hCvarsList[CVAR_CLASSES_MENU_SPAWN]);
-        new bool:menujoin = GetConVarBool(g_hCvarsList[CVAR_CLASSES_MENU_JOIN]);
+        bool menuspawn = GetConVarBool(g_hCvarsList.CVAR_CLASSES_MENU_SPAWN);
+        bool menujoin = GetConVarBool(g_hCvarsList.CVAR_CLASSES_MENU_JOIN);
         if (menuspawn || (menujoin && !ClassPlayerSpawned[client]))
         {
             ClassPlayerSpawned[client] = true;
@@ -292,7 +292,7 @@ ClassOnClientSpawn(client)
     // Note: Class attributes are applied in ClassOnClientSpawnPost.
     
     // Check if instant class change cvar is set.
-    new Float:instantspawn = GetConVarFloat(g_hCvarsList[CVAR_CLASSES_CHANGE_TIMELIMIT]);
+    float instantspawn = GetConVarFloat(g_hCvarsList.CVAR_CLASSES_CHANGE_TIMELIMIT);
     if (instantspawn > 0)
     {
         // Allow instant class change.
@@ -313,7 +313,7 @@ ClassOnClientSpawn(client)
  * 
  * @param client    The client index.
  */
-ClassOnClientSpawnPost(client)
+void ClassOnClientSpawnPost(int client)
 {
     // Check if there are no valid classes. Block this event if classes aren't
     // done loading.
@@ -331,7 +331,7 @@ ClassOnClientSpawnPost(client)
  * 
  * @param client    The client index.
  */
-ClassOnClientDeath(client)
+void ClassOnClientDeath(int client)
 {
     // Disable class attributes with timers.
     ClassHealthRegenStop(client);
@@ -348,14 +348,14 @@ ClassOnClientDeath(client)
  * 
  * @param client    The client index.
  */
-ClassOnClientInfected(client, bool:motherzombie = false)
+void ClassOnClientInfected(int client, bool motherzombie = false)
 {
-    new classindex = ClassGetActiveIndex(client);
-    new isadmin;
-    new motherindex;
-    new filter[ClassFilter];
+    int classindex = ClassGetActiveIndex(client);
+    int isadmin;
+    int motherindex;
+    ClassFilter filter;
     
-    decl String:motherzombiesetting[64];
+    char motherzombiesetting[64];
     
     // Disable class attributes with timers.
     ClassHealthRegenStop(client);
@@ -371,7 +371,7 @@ ClassOnClientInfected(client, bool:motherzombie = false)
         isadmin = ZRIsClientAdmin(client) ? ZR_CLASS_FLAG_ADMIN_ONLY : 0;
         
         // Get default mother zombie setting.
-        GetConVarString(g_hCvarsList[CVAR_CLASSES_DEFAULT_M_ZOMB], motherzombiesetting, sizeof(motherzombiesetting));
+        GetConVarString(g_hCvarsList.CVAR_CLASSES_DEFAULT_M_ZOMB, motherzombiesetting, sizeof(motherzombiesetting));
         
         if (StrEqual(motherzombiesetting, "disabled", false))
         {
@@ -383,13 +383,13 @@ ClassOnClientInfected(client, bool:motherzombie = false)
             // ---------------
             
             // Exclude special class flags.
-            filter[ClassFilter_DenyFlags] = ZR_CLASS_SPECIALFLAGS;
+            filter.ClassFilter_DenyFlags = ZR_CLASS_SPECIALFLAGS;
             
             // Allow admin classes if admin.
-            filter[ClassFilter_DenyFlags] -= isadmin;
+            filter.ClassFilter_DenyFlags -= isadmin;
             
             // Specify client for checking group permissions.
-            filter[ClassFilter_Client] = client;
+            filter.ClassFilter_Client = client;
             
             // Get class
             // ---------
@@ -413,16 +413,16 @@ ClassOnClientInfected(client, bool:motherzombie = false)
             // ---------------
             
             // Exclude special class flags except mother zombies.
-            filter[ClassFilter_DenyFlags] = ZR_CLASS_SPECIALFLAGS - ZR_CLASS_FLAG_MOTHER_ZOMBIE;
+            filter.ClassFilter_DenyFlags = ZR_CLASS_SPECIALFLAGS - ZR_CLASS_FLAG_MOTHER_ZOMBIE;
             
             // Require mother zombie class flag.
-            filter[ClassFilter_RequireFlags] = ZR_CLASS_FLAG_MOTHER_ZOMBIE;
+            filter.ClassFilter_RequireFlags = ZR_CLASS_FLAG_MOTHER_ZOMBIE;
             
             // Allow admin classes if admin.
-            filter[ClassFilter_DenyFlags] -= isadmin;
+            filter.ClassFilter_DenyFlags -= isadmin;
             
             // Specify client for checking group permissions.
-            filter[ClassFilter_Client] = client;
+            filter.ClassFilter_Client = client;
             
             // Get class
             // ---------
@@ -477,8 +477,9 @@ ClassOnClientInfected(client, bool:motherzombie = false)
 /**
  * Timer callback for disabling instant class change setting on a client.
  */
-public Action:Event_ClassDisableInstantSpawn(Handle:timer, any:client)
+public Action Event_ClassDisableInstantSpawn(Handle timer, any client)
 {
     // Disable instant class change.
     ClassAllowInstantChange[client] = false;
+    return Plugin_Continue;
 }

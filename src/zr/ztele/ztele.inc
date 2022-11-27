@@ -242,7 +242,7 @@ public int ZTele_ForceHandle(Handle menu_ztele_force, MenuAction action, int cli
             // Re-send the menu.
             MenuClientList(client, ZTele_ForceHandle, true, true, false, "ZTele clients title");
             
-            return;
+            return 0;
         }
         
         // Get the target's name for future use.
@@ -280,6 +280,7 @@ public int ZTele_ForceHandle(Handle menu_ztele_force, MenuAction action, int cli
     {
         CloseHandle(menu_ztele_force);
     }
+    return 0;
 }
 
 /**

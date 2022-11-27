@@ -25,7 +25,7 @@
  * ============================================================================
  */
 
-ClassOnCommandsCreate()
+void ClassOnCommandsCreate()
 {
     // Register ZClass command.
     RegConsoleCmd(SAYHOOKS_KEYWORD_ZCLASS, ZClassCommand, "Opens class selection menu.");
@@ -41,7 +41,7 @@ ClassOnCommandsCreate()
 /**
  * Hook commands related to classes here.
  */
-ClassOnCommandsHook()
+void ClassOnCommandsHook()
 {
     // Forward event to sub-modules.
     ClassOverlayOnCommandsHook();
@@ -54,7 +54,7 @@ ClassOnCommandsHook()
  * @param client    The client index.
  * @param argc      Argument count.
  */
-public Action:ZClassCommand(client, argc)
+public Action ZClassCommand(int client, int argc)
 {
     // If client is console, then stop and tell them this feature is for players only.
     if (ZRIsConsole(client))
@@ -77,9 +77,9 @@ public Action:ZClassCommand(client, argc)
  * @param client    The client index.
  * @param argc      Argument count.
  */
-public Action:ClassDumpCommand(client, argc)
+public Action ClassDumpCommand(int client, int argc)
 {
-    decl String:syntax[320];
+    char syntax[320];
     syntax[0] = 0;
     
     // Check if privileged.
@@ -102,12 +102,12 @@ public Action:ClassDumpCommand(client, argc)
         return Plugin_Handled;
     }
     
-    new cachetype = -1;
-    new index = -1;
+    int cachetype = -1;
+    int index = -1;
     
-    decl String:type[64];
-    decl String:target[64];
-    decl String:buffer[2048];
+    char type[64];
+    char target[64];
+    char buffer[2048];
     
     // Quick initialize buffer.
     buffer[0] = 0;
@@ -166,9 +166,9 @@ public Action:ClassDumpCommand(client, argc)
     ClassDumpData(index, cachetype, buffer, sizeof(buffer));
     
     // Print all data to client.
-    decl String:partbuffer[1024];
-    new pos;
-    new cellswritten = 1;   // Initialize for the loop.
+    char partbuffer[1024];
+    int pos;
+    int cellswritten = 1;   // Initialize for the loop.
 
     while (cellswritten)
     {
@@ -187,11 +187,11 @@ public Action:ClassDumpCommand(client, argc)
  * @param client    The client index.
  * @param argc      Argument count.
  */
-public Action:ClassDumpMultipliersCommand(client, argc)
+public Action ClassDumpMultipliersCommand(int client, int argc)
 {
-    decl String:buffer[512];
-    decl String:linebuffer[128];
-    decl String:arg[16];
+    char buffer[512];
+    char linebuffer[128];
+    char arg[16];
     buffer[0] = 0;
     
     // Check if privileged.
@@ -208,7 +208,7 @@ public Action:ClassDumpMultipliersCommand(client, argc)
         return Plugin_Handled;
     }
     
-    new teamid = -1;
+    int teamid = -1;
     
     // Get team id.
     GetCmdArg(1, arg, sizeof(arg));
@@ -271,9 +271,9 @@ public Action:ClassDumpMultipliersCommand(client, argc)
  * Note: Original values are retrieved from the original class cache, not the
  *       modified class cache.
  */
-public Action:ClassModifyCommand(client, argc)
+public Action ClassModifyCommand(int client, int argc)
 {
-    decl String:syntax[1024];
+    char syntax[1024];
     syntax[0] = 0;
     
     // Check if privileged.
@@ -297,19 +297,19 @@ public Action:ClassModifyCommand(client, argc)
         return Plugin_Handled;
     }
     
-    decl String:classname[64];
-    decl String:attributename[128];
-    decl String:value[256];
-    decl String:ismultiplier[4];
+    char classname[64];
+    char attributename[128];
+    char value[256];
+    char ismultiplier[4];
     
-    new attributeflag;
-    new ClassDataTypes:attributetype;
-    new bool:isgroup;
-    new bool:hasmultiplier;
-    new Handle:classlist;
+    int attributeflag;
+    ClassDataTypes attributetype;
+    bool isgroup;
+    bool hasmultiplier;
+    Handle classlist;
     
-    new classindex;
-    new bool:listresult;
+    int classindex;
+    bool listresult;
     classlist = CreateArray();
     
     // Get command arguments.
@@ -374,9 +374,9 @@ public Action:ClassModifyCommand(client, argc)
         }
         
         // Loop through all classes in the list.
-        new listsize = GetArraySize(classlist);
+        int listsize = GetArraySize(classlist);
         
-        for (new i = 0; i < listsize; i++)
+        for (int i = 0; i < listsize; i++)
         {
             classindex = GetArrayCell(classlist, i);
             
@@ -384,7 +384,7 @@ public Action:ClassModifyCommand(client, argc)
             {
                 case ClassDataType_Boolean:
                 {
-                    if (!ClassModifyBoolean(classindex, attributeflag, bool:StringToInt(value)))
+                    if (!ClassModifyBoolean(classindex, attributeflag, view_as<bool>(StringToInt(value))))
                     {
                         ReplyToCommand(client, "Failed to set \"%s\" to \"%s\" in class \"%d\".", attributename, value, classindex);
                     }
@@ -497,9 +497,9 @@ public Action:ClassModifyCommand(client, argc)
  * Note: Original values are retrieved from the original class cache, not the
  *       modified class cache.
  */
-public Action:ClassSetMultiplierCommand(client, argc)
+public Action ClassSetMultiplierCommand(int client, int argc)
 {
-    decl String:syntax[320];
+    char syntax[320];
     syntax[0] = 0;
     
     // Check if privileged.
@@ -519,13 +519,13 @@ public Action:ClassSetMultiplierCommand(client, argc)
         return Plugin_Handled;
     }
     
-    decl String:teamname[16];
-    decl String:attributename[32];
-    decl String:multiplier[32];
+    char teamname[16];
+    char attributename[32];
+    char multiplier[32];
     
-    new teamid = -1;
-    new ClassMultipliers:attribute;
-    new Float:value;
+    int teamid = -1;
+    ClassMultipliers attribute;
+    float value;
     
     // Get arguments.
     GetCmdArg(1, teamname, sizeof(teamname));
@@ -575,13 +575,13 @@ public Action:ClassSetMultiplierCommand(client, argc)
  * @param client    The client index.
  * @param argc      Argument count.
  */
-public Action:ClassReloadCommand(client, argc)
+public Action ClassReloadCommand(int client, int argc)
 {
-    decl String:arg[MAX_TARGET_LENGTH];
-    decl String:targetname[MAX_TARGET_LENGTH];
-    new targetlist[MAXPLAYERS + 1];
-    new targetcount;
-    new bool:tn_is_ml;
+    char arg[MAX_TARGET_LENGTH];
+    char targetname[MAX_TARGET_LENGTH];
+    int targetlist[MAXPLAYERS + 1];
+    int targetcount;
+    bool tn_is_ml;
     
     // Check if privileged.
     if (!ZRIsClientPrivileged(client, OperationType_Generic))
@@ -610,7 +610,7 @@ public Action:ClassReloadCommand(client, argc)
     }
     
     // Loop through each target.
-    for (new target = 0; target < targetcount; target++)
+    for (int target = 0; target < targetcount; target++)
     {
         ClassReloadPlayer(targetlist[target]);
     }
@@ -636,7 +636,7 @@ public Action:ClassReloadCommand(client, argc)
  * @param value             New value to set.
  * @return                  True on success, false otherwise.
  */
-stock bool:ClassModifyBoolean(classindex, attributeflag, bool:value)
+stock bool ClassModifyBoolean(int classindex, int attributeflag, bool value)
 {
     // Validate class index.
     if (!ClassValidateIndex(classindex))
@@ -648,22 +648,22 @@ stock bool:ClassModifyBoolean(classindex, attributeflag, bool:value)
     {
         case ZR_CLASS_ENABLED:
         {
-            ClassDataCache[classindex][Class_Enabled] = bool:value;
+            ClassDataCache[classindex].Class_Enabled = view_as<bool>(value);
             return true;
         }
         case ZR_CLASS_NVGS:
         {
-            ClassDataCache[classindex][Class_Nvgs] = bool:value;
+            ClassDataCache[classindex].Class_Nvgs = view_as<bool>(value);
             return true;
         }
         case ZR_CLASS_NO_FALL_DAMAGE:
         {
-            ClassDataCache[classindex][Class_NoFallDamage] = bool:value;
+            ClassDataCache[classindex].Class_NoFallDamage = view_as<bool>(value);
             return true;
         }
         case ZR_CLASS_HAS_NAPALM:
         {
-            ClassDataCache[classindex][Class_HasNapalm] = bool:value;
+            ClassDataCache[classindex].Class_HasNapalm = view_as<bool>(value);
             return true;
         }
     }
@@ -684,7 +684,7 @@ stock bool:ClassModifyBoolean(classindex, attributeflag, bool:value)
  *                          disable. Value is ignored if this is non-zero.
  * @return                  True on success, false otherwise.
  */
-stock ClassModifyInteger(classindex, attributeflag, value, Float:multiplier = 0.0)
+stock bool ClassModifyInteger(int classindex, int attributeflag, int value, float multiplier = 0.0)
 {
     // Validate class index.
     if (!ClassValidateIndex(classindex))
@@ -693,104 +693,104 @@ stock ClassModifyInteger(classindex, attributeflag, value, Float:multiplier = 0.
     }
     
     // Check if multiplier is specified.
-    new bool:ismultiplier = (multiplier != 0.0) ? true : false;
+    bool ismultiplier = (multiplier != 0.0) ? true : false;
     
     switch (attributeflag)
     {
         case ZR_CLASS_FLAGS:
         {
-            ClassDataCache[classindex][Class_Flags] = value;
+            ClassDataCache[classindex].Class_Flags = value;
             return true;
         }
         case ZR_CLASS_MODEL_SKIN_INDEX:
         {
-            ClassDataCache[classindex][Class_ModelSkinIndex] = value;
+            ClassDataCache[classindex].Class_ModelSkinIndex = value;
             return true;
         }
         case ZR_CLASS_ALPHA_INITIAL:
         {
             if (ismultiplier)
             {
-                value = RoundToNearest(float(ClassData[classindex][Class_AlphaInitial]) * multiplier);
+                value = RoundToNearest(float(ClassData[classindex].Class_AlphaInitial) * multiplier);
             }
-            ClassDataCache[classindex][Class_AlphaInitial] = value;
+            ClassDataCache[classindex].Class_AlphaInitial = value;
             return true;
         }
         case ZR_CLASS_ALPHA_DAMAGED:
         {
             if (ismultiplier)
             {
-                value = RoundToNearest(float(ClassData[classindex][Class_AlphaDamaged]) * multiplier);
+                value = RoundToNearest(float(ClassData[classindex].Class_AlphaDamaged) * multiplier);
             }
-            ClassDataCache[classindex][Class_AlphaDamaged] = value;
+            ClassDataCache[classindex].Class_AlphaDamaged = value;
             return true;
         }
         case ZR_CLASS_ALPHA_DAMAGE:
         {
             if (ismultiplier)
             {
-                value = RoundToNearest(float(ClassData[classindex][Class_AlphaDamage]) * multiplier);
+                value = RoundToNearest(float(ClassData[classindex].Class_AlphaDamage) * multiplier);
             }
-            ClassDataCache[classindex][Class_AlphaDamage] = value;
+            ClassDataCache[classindex].Class_AlphaDamage = value;
             return true;
         }
         case ZR_CLASS_FOV:
         {
-            ClassDataCache[classindex][Class_Fov] = value;
+            ClassDataCache[classindex].Class_Fov = value;
             return true;
         }
         case ZR_CLASS_IMMUNITY_AMOUNT:
         {
             if (ismultiplier)
             {
-                value = ClassData[classindex][Class_ImmunityAmount] * value;
+                value = ClassData[classindex].Class_ImmunityAmount * value;
             }
-            ClassDataCache[classindex][Class_ImmunityAmount] = value;
+            ClassDataCache[classindex].Class_ImmunityAmount = value;
             return true;
         }
         case ZR_CLASS_IMMUNITY_COOLDOWN:
         {
             if (ismultiplier)
             {
-                value = ClassData[classindex][Class_ImmunityCooldown] * value;
+                value = ClassData[classindex].Class_ImmunityCooldown * value;
             }
-            ClassDataCache[classindex][Class_ImmunityCooldown] = value;
+            ClassDataCache[classindex].Class_ImmunityCooldown = value;
             return true;
         }
         case ZR_CLASS_HEALTH:
         {
             if (ismultiplier)
             {
-                value = RoundToNearest(float(ClassData[classindex][Class_Health]) * multiplier);
+                value = RoundToNearest(float(ClassData[classindex].Class_Health) * multiplier);
             }
-            ClassDataCache[classindex][Class_Health] = value;
+            ClassDataCache[classindex].Class_Health = value;
             return true;
         }
         case ZR_CLASS_HEALTH_REGEN_AMOUNT:
         {
             if (ismultiplier)
             {
-                value = RoundToNearest(float(ClassData[classindex][Class_HealthRegenAmount]) * multiplier);
+                value = RoundToNearest(float(ClassData[classindex].Class_HealthRegenAmount) * multiplier);
             }
-            ClassDataCache[classindex][Class_HealthRegenAmount] = value;
+            ClassDataCache[classindex].Class_HealthRegenAmount = value;
             return true;
         }
         case ZR_CLASS_HEALTH_INFECT_GAIN:
         {
             if (ismultiplier)
             {
-                value = RoundToNearest(float(ClassData[classindex][Class_HealthInfectGain]) * multiplier);
+                value = RoundToNearest(float(ClassData[classindex].Class_HealthInfectGain) * multiplier);
             }
-            ClassDataCache[classindex][Class_HealthInfectGain] = value;
+            ClassDataCache[classindex].Class_HealthInfectGain = value;
             return true;
         }
         case ZR_CLASS_KILL_BONUS:
         {
             if (ismultiplier)
             {
-                value = RoundToNearest(float(ClassData[classindex][Class_KillBonus]) * multiplier);
+                value = RoundToNearest(float(ClassData[classindex].Class_KillBonus) * multiplier);
             }
-            ClassDataCache[classindex][Class_KillBonus] = value;
+            ClassDataCache[classindex].Class_KillBonus = value;
             return true;
         }
     }
@@ -810,7 +810,7 @@ stock ClassModifyInteger(classindex, attributeflag, value, Float:multiplier = 0.
  *                          class value. Unsupported attributes are ignored.
  * @return                  True on success, false otherwise.
  */
-stock ClassModifyFloat(classindex, attributeflag, Float:value, bool:ismultiplier = false)
+stock bool ClassModifyFloat(int classindex, int attributeflag, float value, bool ismultiplier = false)
 {
     // Validate class index.
     if (!ClassValidateIndex(classindex))
@@ -824,54 +824,54 @@ stock ClassModifyFloat(classindex, attributeflag, Float:value, bool:ismultiplier
         {
             if (ismultiplier)
             {
-                value = ClassData[classindex][Class_NapalmTime] * value;
+                value = ClassData[classindex].Class_NapalmTime * value;
             }
-            ClassDataCache[classindex][Class_NapalmTime] = value;
+            ClassDataCache[classindex].Class_NapalmTime = value;
             return true;
         }
         case ZR_CLASS_HEALTH_REGEN_INTERVAL:
         {
             if (ismultiplier)
             {
-                value = ClassData[classindex][Class_HealthRegenInterval] * value;
+                value = ClassData[classindex].Class_HealthRegenInterval * value;
             }
-            ClassDataCache[classindex][Class_HealthRegenInterval] = value;
+            ClassDataCache[classindex].Class_HealthRegenInterval = value;
             return true;
         }
         case ZR_CLASS_SPEED:
         {
             if (ismultiplier)
             {
-                value = ClassData[classindex][Class_Speed] * value;
+                value = ClassData[classindex].Class_Speed * value;
             }
-            ClassDataCache[classindex][Class_Speed] = value;
+            ClassDataCache[classindex].Class_Speed = value;
             return true;
         }
         case ZR_CLASS_KNOCKBACK:
         {
             if (ismultiplier)
             {
-                value = ClassData[classindex][Class_KnockBack] * value;
+                value = ClassData[classindex].Class_KnockBack * value;
             }
-            ClassDataCache[classindex][Class_KnockBack] = value;
+            ClassDataCache[classindex].Class_KnockBack = value;
             return true;
         }
         case ZR_CLASS_JUMP_HEIGHT:
         {
             if (ismultiplier)
             {
-                value = ClassData[classindex][Class_JumpHeight] * value;
+                value = ClassData[classindex].Class_JumpHeight * value;
             }
-            ClassDataCache[classindex][Class_JumpHeight] = value;
+            ClassDataCache[classindex].Class_JumpHeight = value;
             return true;
         }
         case ZR_CLASS_JUMP_DISTANCE:
         {
             if (ismultiplier)
             {
-                value = ClassData[classindex][Class_JumpDistance] * value;
+                value = ClassData[classindex].Class_JumpDistance * value;
             }
-            ClassDataCache[classindex][Class_JumpDistance] = value;
+            ClassDataCache[classindex].Class_JumpDistance = value;
             return true;
         }
     }
@@ -888,7 +888,7 @@ stock ClassModifyFloat(classindex, attributeflag, Float:value, bool:ismultiplier
  * @param value             New value to set.
  * @return                  True on success, false otherwise.
  */
-stock ClassModifyString(classindex, attributeflag, const String:value[])
+stock bool ClassModifyString(int classindex, int attributeflag, char[] value)
 {
     // Validate class index.
     if (!ClassValidateIndex(classindex))
@@ -900,38 +900,38 @@ stock ClassModifyString(classindex, attributeflag, const String:value[])
     {
         case ZR_CLASS_GROUP:
         {
-            strcopy(ClassDataCache[classindex][Class_Group], 64, value);
+            strcopy(ClassDataCache[classindex].Class_Group, 64, value);
             return true;
         }
         case ZR_CLASS_NAME:
         {
-            strcopy(ClassDataCache[classindex][Class_Name], 64, value);
+            strcopy(ClassDataCache[classindex].Class_Name, 64, value);
             return true;
         }
         case ZR_CLASS_DESCRIPTION:
         {
-            strcopy(ClassDataCache[classindex][Class_Description], 256, value);
+            strcopy(ClassDataCache[classindex].Class_Description, 256, value);
             return true;
         }
         case ZR_CLASS_MODEL_PATH:
         {
-            strcopy(ClassDataCache[classindex][Class_ModelPath], PLATFORM_MAX_PATH, value);
+            strcopy(ClassDataCache[classindex].Class_ModelPath, PLATFORM_MAX_PATH, value);
             return true;
         }
         case ZR_CLASS_OVERLAY_PATH:
         {
-            strcopy(ClassDataCache[classindex][Class_OverlayPath], PLATFORM_MAX_PATH, value);
+            strcopy(ClassDataCache[classindex].Class_OverlayPath, PLATFORM_MAX_PATH, value);
             return true;
         }
         case ZR_CLASS_IMMUNITY_MODE:
         {
             // Convert to mode.
-            new ImmunityMode:mode = ImmunityStringToMode(value);
+            ImmunityMode mode = ImmunityStringToMode(value);
             
             // Validate.
             if (mode != Immunity_Invalid)
             {
-                ClassDataCache[classindex][Class_ImmunityMode] = mode;
+                ClassDataCache[classindex].Class_ImmunityMode = mode;
                 return true;
             }
             else

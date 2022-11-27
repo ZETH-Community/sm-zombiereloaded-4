@@ -29,10 +29,10 @@ VersionOnCommandsCreate()
     RegConsoleCmd("zr_version", Command_Version, "Prints version info about this plugin.");
 }
 
-public Action:Command_Version(client, argc)
+public Action Command_Version(client, argc)
 {
-    decl String:buffer[512];
-    decl String:linebuffer[128];
+    char buffer[512];
+    char linebuffer[128];
     buffer[0] = 0;
     linebuffer[0] = 0;
     
