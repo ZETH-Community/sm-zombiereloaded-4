@@ -89,7 +89,7 @@ stock void TranslationPluginFormatString(char[] text, int maxlen, bool color = t
     if (color)
     {
         // Format prefix onto the string.
-        Format(text, maxlen, "@green%s @default%s", TRANSLATION_PHRASE_PREFIX, text);
+        Format(text, maxlen, " @green%s @default%s", TRANSLATION_PHRASE_PREFIX, text);
         
         // Replace color tokens with CS:S color chars.
         ReplaceString(text, maxlen, "@default", TRANSLATION_TEXT_COLOR_DEFAULT);
