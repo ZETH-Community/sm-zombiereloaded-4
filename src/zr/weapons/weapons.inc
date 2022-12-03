@@ -84,8 +84,10 @@ enum WeaponsSlot
     Slot_Secondary      = 1,    /** Secondary weapon slot. */
     Slot_Melee          = 2,    /** Melee (knife) weapon slot. */
     Slot_Projectile     = 3,    /** Projectile (grenades, flashbangs, etc) weapon slot. */
-    Slot_Explosive      = 4,    /** Explosive (c4) weapon slot. */
-    Slot_NVGs           = 5,    /** NVGs (fake) equipment slot. */
+    Slot_FireGrenade    = 4,    /** Fire grenade slot. */
+    Slot_Decoy			= 5,	/** Decoy Slot*/
+    Slot_Explosive      = 6,    /** Explosive (c4) weapon slot. */
+    Slot_NVGs           = 7,    /** NVGs (fake) equipment slot. */
     Slot_DangerZone     = 11,   /** Dangerzone equipment slot. (CSGO only) */
     Slot_MAXSIZE
 }
@@ -268,9 +270,9 @@ void WeaponsCacheData()
         bool toggleable = ConfigKvGetStringBool(kvWeapons, "toggleable", "yes");
         
         // Weapon Ammo (core)
-    	KvGetString(kvWeapons, "ammotype", ammotype, sizeof(ammotype));
-    	int ammoprice = KvGetNum(kvWeapons, "ammoprice", -1);
-    	
+        KvGetString(kvWeapons, "ammotype", ammotype, sizeof(ammotype));
+        int ammoprice = KvGetNum(kvWeapons, "ammoprice", -1);
+        
         // Knockback (module)
         float knockback = KvGetFloat(kvWeapons, "knockback", 1.0);
         

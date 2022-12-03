@@ -200,17 +200,42 @@ stock WeaponAmmoGrenadeType WeaponAmmoEntityToGrenadeType(const char[] weaponent
 {
     if (StrEqual(weaponentity, "weapon_hegrenade"))
     {
-        return GrenadeType_HEGrenade;
+        if (g_Game == Game_CSGO)
+            return GrenadeType_HEGrenadeCSGO;
+        else
+            return GrenadeType_HEGrenade;
     }
     else if (StrEqual(weaponentity, "weapon_flashbang"))
     {
-        return GrenadeType_Flashbang;
+        if (g_Game == Game_CSGO)
+            return GrenadeType_FlashbangCSGO;
+        else
+            return GrenadeType_Flashbang;
     }
     else if (StrEqual(weaponentity, "weapon_smokegrenade"))
     {
-        return GrenadeType_Smokegrenade;
+        if (g_Game == Game_CSGO)
+            return GrenadeType_SmokegrenadeCSGO;
+        else
+            return GrenadeType_Smokegrenade;
     }
-    
+    else if (StrEqual(weaponentity, "weapon_molotov"))
+    {
+        return GrenadeType_Incendiary;
+    }
+    else if (StrEqual(weaponentity, "weapon_incgrenade"))
+    {
+        return GrenadeType_Incendiary;
+    }
+    else if (StrEqual(weaponentity, "weapon_decoy"))
+    {
+        return GrenadeType_Decoy;
+    }
+    else if (StrEqual(weaponentity, "weapon_tagrenade"))
+    {
+        return GrenadeType_Tactical;
+    }
+
     return GrenadeType_Invalid;
 }
 
@@ -224,21 +249,33 @@ stock WeaponAmmoGrenadeType WeaponAmmoEntityToGrenadeType(const char[] weaponent
  {
     switch(grenadetype)
     {
-        case GrenadeType_HEGrenade:
+        case GrenadeType_HEGrenade, GrenadeType_HEGrenadeCSGO:
         {
             // Attempt to find a cvar provided by an outside plugin.
             Handle gplimit = FindConVar(GRENADE_PACK_CVAR_LIMIT);
-            
+
             // If Grenade Pack is loaded and the cvar was found, then get the value of the outside cvar, if not return CS:S default.
             return (g_bGrenadePack && gplimit != INVALID_HANDLE) ? GetConVarInt(gplimit) : WEAPONAMMO_HEGRENADE_LIMIT;
         }
-        case GrenadeType_Flashbang:
+        case GrenadeType_Flashbang, GrenadeType_FlashbangCSGO:
         {
             return WEAPONAMMO_FLASHBANG_LIMIT;
         }
-        case GrenadeType_Smokegrenade:
+        case GrenadeType_Smokegrenade, GrenadeType_SmokegrenadeCSGO:
         {
             return WEAPONAMMO_SMOKEGRENADE_LIMIT;
+        }
+        case GrenadeType_Incendiary:
+        {
+            return WEAPONAMMO_INCENDIARY_LIMIT;
+        }
+        case GrenadeType_Decoy:
+        {
+            return WEAPONAMMO_DECOY_LIMIT;
+        }
+        case GrenadeType_Tactical:
+        {
+            return WEAPONAMMO_TACTICAL_LIMIT;
         }
     }
     

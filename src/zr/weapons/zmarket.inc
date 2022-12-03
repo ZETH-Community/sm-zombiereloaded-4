@@ -453,6 +453,8 @@ void ZMarketMenuLoadout(int client)
     char secondary[MENU_LINE_REG_LENGTH];
     char melee[MENU_LINE_REG_LENGTH];
     char projectile[MENU_LINE_REG_LENGTH];
+    char firenade[MENU_LINE_REG_LENGTH];
+    char decoy[MENU_LINE_REG_LENGTH];
     char explosive[MENU_LINE_REG_LENGTH];
     char nvgs[MENU_LINE_REG_LENGTH];
     
@@ -462,6 +464,8 @@ void ZMarketMenuLoadout(int client)
     Format(secondary, sizeof(secondary), "%t", "Weapons menu zmarket loadout secondary", rebuyweapons[Slot_Secondary]);
     Format(melee, sizeof(melee), "%t", "Weapons menu zmarket loadout melee", rebuyweapons[Slot_Melee]);
     Format(projectile, sizeof(projectile), "%t", "Weapons menu zmarket loadout projectile", rebuyweapons[Slot_Projectile]);
+    Format(firenade, sizeof(firenade), "%t", "Weapons menu zmarket loadout firenade", rebuyweapons[Slot_FireGrenade]);
+    Format(decoy, sizeof(decoy), "%t", "Weapons menu zmarket loadout decoy", rebuyweapons[Slot_Decoy]);
     Format(explosive, sizeof(explosive), "%t", "Weapons menu zmarket loadout explosive", rebuyweapons[Slot_Explosive]);
     Format(nvgs, sizeof(nvgs), "%t", "Weapons menu zmarket loadout nvgs", nvgsbool);
     
@@ -471,8 +475,19 @@ void ZMarketMenuLoadout(int client)
     AddMenuItem(menu_zmarket_loadout, "1", secondary, MenuGetItemDraw(!StrEqual(rebuyweapons[Slot_Secondary], empty)));
     AddMenuItem(menu_zmarket_loadout, "2", melee, MenuGetItemDraw(!StrEqual(rebuyweapons[Slot_Melee], empty)));
     AddMenuItem(menu_zmarket_loadout, "3", projectile, MenuGetItemDraw(!StrEqual(rebuyweapons[Slot_Projectile], empty)));
-    AddMenuItem(menu_zmarket_loadout, "4", explosive, MenuGetItemDraw(!StrEqual(rebuyweapons[Slot_Explosive], empty)));
-    AddMenuItem(menu_zmarket_loadout, "5", nvgs, MenuGetItemDraw(bool:rebuyweapons[Slot_NVGs][0]));
+
+    if(g_Game == Game_CSGO)
+    {
+        AddMenuItem(menu_zmarket_loadout, "4", firenade, MenuGetItemDraw(!StrEqual(rebuyweapons[Slot_FireGrenade], empty)));
+        AddMenuItem(menu_zmarket_loadout, "5", decoy, MenuGetItemDraw(!StrEqual(rebuyweapons[Slot_Decoy], empty)));	 
+        AddMenuItem(menu_zmarket_loadout, "6", explosive, MenuGetItemDraw(!StrEqual(rebuyweapons[Slot_Explosive], empty)));
+        AddMenuItem(menu_zmarket_loadout, "7", nvgs, MenuGetItemDraw(view_as<bool>(rebuyweapons[Slot_NVGs][0])));
+    }
+    else
+    {
+        AddMenuItem(menu_zmarket_loadout, "4", explosive, MenuGetItemDraw(!StrEqual(rebuyweapons[Slot_Explosive], empty)));
+        AddMenuItem(menu_zmarket_loadout, "5", nvgs, MenuGetItemDraw(view_as<bool>(rebuyweapons[Slot_NVGs][0])));
+    }
     
     // Set exit back button.
     SetMenuExitBackButton(menu_zmarket_loadout, true);
@@ -917,10 +932,10 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
     WeaponsGetClientWeapons(client, weapons);
     
     // Check if client is buying the weapon or ammo for it.
-    if (!hasweapon || slot == Slot_Projectile || slot == Slot_NVGs)
+    if (!hasweapon || slot == Slot_Projectile || slot == Slot_NVGs || slot == Slot_Decoy || slot == Slot_FireGrenade)
     {
         // If the item is a projectile or NVGs, then skip.
-        if (slot != Slot_Projectile && slot != Slot_NVGs)
+        if (slot != Slot_Projectile && slot != Slot_NVGs && slot != Slot_Decoy && slot != Slot_FireGrenade)
         {
             // If there is already a weapon in the slot, then force client to drop it.
             if (weapons[slot] > -1)
