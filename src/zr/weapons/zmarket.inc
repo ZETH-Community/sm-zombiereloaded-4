@@ -790,7 +790,7 @@ public int ZMarketMenuTypeWeaponsHandle(Handle menu_zmarket_typeweapons, MenuAct
  * @param weapon    The weapon to equip. (must be in weapons config file)
  * @param rebuy     (Optional) If client is rebuying, ammo will be ignored.
  */
-stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false)
+stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, bool free = false)
 {
     // Get weapon index.
     int weaponindex = WeaponsNameToIndex(weapon);
@@ -804,6 +804,13 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false)
     
     // Get slot index of the weapon being purchased.
     WeaponsSlot slot = WeaponsGetSlot(weaponindex);
+
+    Action result = APIOnclientPurchaseWeapon(client, weapon, rebuy, free);
+
+    if (result == Plugin_Handled)
+    {
+        return false;
+    }
     
     // If client is dead or a zombie, update weapon loadout instead.
     if (!IsPlayerAlive(client) || InfectIsClientInfected(client))
@@ -902,7 +909,8 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false)
     }
     
     // Set client's new cash after purchase.
-    AccountSetClientCash(client, cash - itemprice);
+    if(!free)
+        AccountSetClientCash(client, cash - itemprice);
     
     // Get a list of the client's current weapons.
     int weapons[Slot_MAXSIZE];
@@ -974,6 +982,8 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false)
             WeaponAmmoSetAmmo(weapons[Slot_Secondary], true, sec_clip);
         }
     }
+
+    APIOnclientPurchasedWeapon(client, weapon, rebuy, free);
     
     return true;
 }

@@ -1,0 +1,31 @@
+// ============================================================================
+//
+//                              ZOMBIE:RELOADED
+//                           Downloads configuration
+//
+// See Download List (3.6) section in the manual for detailed info.
+//
+// ============================================================================
+// * Each uncommented line will be used as a file path for clients to download.
+// ----------------------------------------------------------------------------
+// Defaults:
+// ----------------------------------------------------------------------------
+
+// GOZombie
+models/player/kuristaja/zombies/gozombie/gozombie.mdl
+models/player/kuristaja/zombies/gozombie/gozombie.dx90.vtx
+models/player/kuristaja/zombies/gozombie/gozombie.vvd
+models/player/kuristaja/zombies/gozombie/gozombie.phy
+
+materials/models/player/kuristaja/zombies/gozombie/csgo_zombie_normal.vtf
+materials/models/player/kuristaja/zombies/gozombie/csgo_zombie_skin.vmt
+
+// team win overlays
+materials/overlays/zr/zombies_win.vtf
+materials/overlays/zr/zombies_win.vmt
+materials/overlays/zr/humans_win.vtf
+materials/overlays/zr/humans_win.vmt
+
+// zvision
+materials/overlays/zr/zvision.vtf
+materials/overlays/zr/zvision.vmt

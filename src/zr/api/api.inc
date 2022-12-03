@@ -44,6 +44,7 @@
 #include "zr/api/infect.api"
 #include "zr/api/respawn.api"
 #include "zr/api/class.api"
+#include "zr/api/weapons.api"
 //#include "zr/api/knockback.api"
 
 /**
@@ -55,6 +56,7 @@ void APIInit()
     APIInfectInit();
     APIRespawnInit();
     APIClassInit();
+    APIWeaponInit();
 }
 
 /**
