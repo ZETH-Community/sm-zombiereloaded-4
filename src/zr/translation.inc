@@ -45,6 +45,7 @@
 #define TRANSLATION_TEXT_COLOR_DEFAULT "\x01"
 #define TRANSLATION_TEXT_COLOR_LGREEN "\x03"
 #define TRANSLATION_TEXT_COLOR_GREEN "\x04"
+#define TRANSLATION_TEXT_COLOR_LGREEN_CSGO "\x05"
 /**
  * @endsection
  */
@@ -92,8 +93,13 @@ stock void TranslationPluginFormatString(char[] text, int maxlen, bool color = t
         
         // Replace color tokens with CS:S color chars.
         ReplaceString(text, maxlen, "@default", TRANSLATION_TEXT_COLOR_DEFAULT);
-        ReplaceString(text, maxlen, "@lgreen", TRANSLATION_TEXT_COLOR_LGREEN);
         ReplaceString(text, maxlen, "@green", TRANSLATION_TEXT_COLOR_GREEN);
+
+        if(g_Game == Game_CSGO)
+            ReplaceString(text, maxlen, "@lgreen", TRANSLATION_TEXT_COLOR_LGREEN_CSGO);
+            
+        else
+            ReplaceString(text, maxlen, "@lgreen", TRANSLATION_TEXT_COLOR_LGREEN);
         
         return;
     }

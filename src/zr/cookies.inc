@@ -34,6 +34,7 @@ void CookiesInit()
     ClassOnCookiesCreate();
     WeaponsOnCookiesCreate();
     ZHPOnCookiesCreate();
+    SEffectsOnCookiesCreate();
 }
 
 /**

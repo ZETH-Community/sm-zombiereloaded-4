@@ -47,6 +47,7 @@ void CommandsInit()
     VolOnCommandsCreate();
     ZombieSoundsOnCommandsCreate();
     ImmunityOnCommandsCreate();
+    SEffectsOnCommandCreate();
     
     #if defined ADD_VERSION_INFO
         VersionOnCommandsCreate();

@@ -146,7 +146,6 @@ enum struct CvarsList
     Handle CVAR_AMBIENTSOUNDS;
     Handle CVAR_AMBIENTSOUNDS_FILE;
     Handle CVAR_AMBIENTSOUNDS_LENGTH;
-    Handle CVAR_AMBIENTSOUNDS_VOLUME;
     Handle CVAR_ANTISTICK;
     Handle CVAR_ANTISTICK_DEFAULT_WIDTH;
     Handle CVAR_ANTISTICK_FILE_PATH;
@@ -431,8 +430,6 @@ void CvarsCreate()
     g_hCvarsList.CVAR_AMBIENTSOUNDS                    =    CreateConVar("zr_ambientsounds",           "1",                            "Play an ambient sound to all players during gameplay.");
     g_hCvarsList.CVAR_AMBIENTSOUNDS_FILE               =    CreateConVar("zr_ambientsounds_file",      "ambient/zr/zr_ambience.mp3",   "Sound file, relative to \"sound\" folder, to play as ambience.  This file is automatically downloaded to clients. [Dependency: zr_ambientsounds]");
     g_hCvarsList.CVAR_AMBIENTSOUNDS_LENGTH             =    CreateConVar("zr_ambientsounds_length",    "60.0",                         "Length of the ambient sound. [Dependency: zr_ambientsounds]");
-    g_hCvarsList.CVAR_AMBIENTSOUNDS_VOLUME             =    CreateConVar("zr_ambientsounds_volume",    "0.8",                          "Volume of the ambient sound. [1.0 = Max volume | 0.0001 = Not audible | Dependency: zr_ambientsounds]");
-    
     
     // ===========================
     // Anti-Stick (module)

@@ -1158,4 +1158,42 @@
 		"#format"	"{1:s},{2:d}"
 		"en"		"Ignited player \"{1}\" for camping in a restricted area (ID: {2})."
 	}
+
+	// ===========================
+	// ZVolume (module)
+	// ===========================
+
+	"ZVolume Title"
+	{
+		"en"		"[ZR] Zombie Volume Setting"
+	}
+
+	"Zombie Volume"
+	{
+		"#format"	"{1:d}"
+		"en"		"Zombie Voice [Volume:{1}%]"
+	}
+
+	"Ambient Volume"
+	{
+		"#format"	"{1:d}"
+		"en"		"Ambient Sound [Volume:{1}%]"
+	}
+
+	"Change Volume"
+	{
+		"en"		"Choose Your Volume"
+	}
+
+	"Zombie Voice Changed"
+	{
+		"#format"	"{1:d}"
+		"en"		"Zombie Voice volume has been set to: @lgreen{1}%"
+	}
+
+	"Ambient Changed"
+	{
+		"#format"	"{1:d}"
+		"en"		"Ambient Sound volume has been set to: @lgreen{1}%"
+	}
 }
