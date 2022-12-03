@@ -105,7 +105,7 @@ void SEffectsOnCookiesCreate()
         g_hSEffectsCookie = RegClientCookie("zr_zvolume_zombie", "The Zombie Volume adjust option", CookieAccess_Protected);
     }
 
-    if(g_hSEffectsCookie == INVALID_HANDLE)
+    if(g_hAmbientCookie == INVALID_HANDLE)
     {
         g_hAmbientCookie = RegClientCookie("zr_zvolume_ambient", "The Ambient Volume adjust option", CookieAccess_Protected);
     }
@@ -128,9 +128,10 @@ void SEffectsOnClientCookiesCached(int client)
 
     g_iSEffectsVolume[client] = CookiesGetInt(client, g_hSEffectsCookie);
 
-    GetClientCookie(client, g_hAmbientCookie, sBuffer, sizeof(sBuffer));
+    char sAmbient[8]
+    GetClientCookie(client, g_hAmbientCookie, sAmbient, sizeof(sAmbient));
 
-    if(!sBuffer[0])
+    if(!sAmbient[0])
     {
         CookiesSetInt(client, g_hAmbientCookie, 100);
     }
