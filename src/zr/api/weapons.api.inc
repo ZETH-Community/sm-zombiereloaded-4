@@ -36,7 +36,7 @@ void APIWeaponInit()
     CreateNative("ZR_PurchaseWeaponClient", APIPurchasWeaponClient);
 
     g_hAPIFwdOnclientPurchase = CreateGlobalForward("ZR_OnClientPurchaseWeapon", ET_Hook, Param_CellByRef, Param_String, Param_CellByRef, Param_CellByRef);
-    g_hAPIFwdOnclientPurchase = CreateGlobalForward("ZR_OnClientPurchasedWeapon", ET_Ignore, Param_Cell, Param_String, Param_Cell, Param_Cell);
+    g_hAPIFwdOnclientPurchased = CreateGlobalForward("ZR_OnClientPurchasedWeapon", ET_Ignore, Param_Cell, Param_String, Param_Cell, Param_Cell);
 }
 
 public int APIPurchasWeaponClient(Handle plugin, int numParams)

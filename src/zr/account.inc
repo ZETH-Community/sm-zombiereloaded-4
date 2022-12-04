@@ -61,12 +61,19 @@ void AccountOnClientSpawn(int client)
     {
         return;
     }
-    
+
+    // Has to delay for player to fully spawn and then refill it.
+    CreateTimer(0.3, CashFillTimer, client);
+}
+
+public Action CashFillTimer(Handle timer, any client)
+{
     // Get cash value.
     int cash = GetConVarInt(g_hCvarsList.CVAR_ACCOUNT_CASHFILL_VALUE);
-    
+
     // Set client's account.
     AccountSetClientCash(client, cash);
+    return Plugin_Stop;
 }
 
 /** Client has been hurt.
