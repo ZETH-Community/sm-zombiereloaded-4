@@ -444,12 +444,14 @@ void ChangeSoundVolume(int client, int type, int volume)
     {
         g_iSEffectsVolume[client] = volume;
         TranslationPrintToChat(client, "Zombie Voice Changed", g_iSEffectsVolume[client]);
+        CookiesSetInt(client, g_hSEffectsCookie, volume);
     }
 
     else
     {
         g_iAmbientVolume[client] = volume;
         TranslationPrintToChat(client, "Ambient Changed", g_iAmbientVolume[client]);
+        CookiesSetInt(client, g_hAmbientCookie, volume);
 
         char sound[SOUND_MAX_PATH];
         GetConVarString(g_hCvarsList.CVAR_AMBIENTSOUNDS_FILE, sound, sizeof(sound));
