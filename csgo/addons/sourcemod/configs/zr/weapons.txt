@@ -1029,6 +1029,68 @@
         "zmarketpurchasemax"	"1"
     }
 
+    "IncGrenade"
+    {
+        // General
+
+        "weaponentity"		"weapon_incgrenade"
+        "weapontype"		"All, Fire Grenade"
+        "weaponslot"		"4"
+
+        // Restrict (core)
+
+        "restrictdefault"	"no"
+        "toggleable"		"yes"
+
+        // Knockback (module)
+
+        "knockback"		"6.0"
+
+        // ZMarket (module)
+
+        "zmarketprice"		"850"
+        "zmarketpurchasemax"	"1"
+    }
+
+    "Molotov"
+    {
+        // General
+
+        "weaponentity"		"weapon_molotov"
+        "weapontype"		"All, Fire Grenade"
+        "weaponslot"		"4"
+
+        // Restrict (core)
+
+        "restrictdefault"	"no"
+        "toggleable"		"yes"
+
+        // ZMarket (module)
+
+        "zmarketprice"		"850"
+        "zmarketpurchasemax"	"1"
+    }
+
+    "Decoy"
+    {
+        // General
+
+        "weaponentity"		"weapon_decoy"
+        "weapontype"		"All, Decoy"
+        "weaponslot"		"5"
+
+        // Restrict (core)
+
+        "restrictdefault"	"no"
+        "toggleable"		"yes"
+
+        // ZMarket (module)
+
+        "zmarketprice"		"200"
+        "zmarketpurchasemax"	"1"
+        "zmarketcommand"	"sm_de"
+    }
+
     "NVGs"
     {
         // General
@@ -1045,5 +1107,24 @@
         // ZMarket (module)
 
         "zmarketprice"		"1000"
+    }
+
+    "Kevlar Vest"
+    {
+        // General
+
+        "weaponentity"		"item_kevlar"
+        "weapontype"		"All, Equipment"
+        "weaponslot"		"5"
+
+        // Restrict (core)
+
+        "restrictdefault"	"no"
+        "toggleable"		"yes"
+
+        // ZMarket (module)
+
+        "zmarketprice"		"1000"
+        "zmarketcommand"	"sm_kev,sm_kevlar"
     }
 }

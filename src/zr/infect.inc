@@ -814,6 +814,15 @@ void InfectHumanToZombie(int client, int attacker = -1, bool motherinfect = fals
     
     // Print message to client.
     TranslationPrintToChat(client, "Infect infected");
+
+    // Completely Remove csgo Kevlar for zombie
+    if(g_Game == Game_CSGO)
+    {
+        SetEntProp(client, Prop_Send, "m_bHasHelmet", false);
+        SetEntProp(client, Prop_Send, "m_bHasHeavyArmor", false);
+        SetEntProp(client, Prop_Send, "m_bWearingSuit", false);
+        SetEntProp(client, Prop_Data, "m_ArmorValue", 0);
+    }
     
     // Forward event to modules.
     ClassOnClientInfected(client, motherinfect);
