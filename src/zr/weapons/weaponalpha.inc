@@ -155,7 +155,7 @@ void WeaponAlphaApplyWeaponAlpha(int entity, int alpha)
     }
     
     // Get client's list of weapons.
-    int weapons[Slot_MAXSIZE];
+    int weapons[MAX_SLOTWEAPON];
     WeaponsGetClientWeapons(entity, weapons);
     
     // Loop through array slots and set alpha.

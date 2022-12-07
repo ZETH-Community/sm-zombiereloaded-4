@@ -419,7 +419,7 @@ void ZMarketMenuLoadout(int client)
     Handle menu_zmarket_loadout = CreateMenu(ZMarketMenuLoadoutHandle);
     
     // Transfer cookie values into an array.
-    char rebuyweapons[Slot_MAXSIZE][WEAPONS_MAX_LENGTH];
+    char rebuyweapons[MAX_SLOTWEAPON][WEAPONS_MAX_LENGTH];
     ZMarketCookiesToArray(client, rebuyweapons, sizeof(rebuyweapons), sizeof(rebuyweapons[]));
     
     SetGlobalTransTarget(client);
@@ -928,7 +928,7 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
         AccountSetClientCash(client, cash - itemprice);
     
     // Get a list of the client's current weapons.
-    int weapons[Slot_MAXSIZE];
+    int weapons[MAX_SLOTWEAPON];
     WeaponsGetClientWeapons(client, weapons);
     
     // Check if client is buying the weapon or ammo for it.
@@ -1031,7 +1031,7 @@ bool ZMarketGetCurrentLoadout(int client)
     }
     
     // Get all of client's current weapons.
-    int weapons[Slot_MAXSIZE];
+    int weapons[MAX_SLOTWEAPON];
     WeaponsGetClientWeapons(client, weapons);
     
     char weaponname[WEAPONS_MAX_LENGTH];
@@ -1084,7 +1084,7 @@ bool ZMarketGetCurrentLoadout(int client)
  * @param maxweapons    The max amount of weapons in the array.
  * @param maxlen        The max length of each cookie result.
  */
-stock void ZMarketArrayToCookies(client, char rebuyweapons[Slot_MAXSIZE][WEAPONS_MAX_LENGTH], int maxweapons, int maxlen)
+stock void ZMarketArrayToCookies(client, char rebuyweapons[MAX_SLOTWEAPON][WEAPONS_MAX_LENGTH], int maxweapons, int maxlen)
 {
     char rebuycookiename[32];
     Handle rebuycookie;
@@ -1110,7 +1110,7 @@ stock void ZMarketArrayToCookies(client, char rebuyweapons[Slot_MAXSIZE][WEAPONS
  * @param maxweapons    The max amount of weapons in the array.
  * @param maxlen        The max length of each cookie result.
  */
-stock void ZMarketCookiesToArray(int client, char rebuyweapons[Slot_MAXSIZE][WEAPONS_MAX_LENGTH], int maxweapons, int maxlen)
+stock void ZMarketCookiesToArray(int client, char rebuyweapons[MAX_SLOTWEAPON][WEAPONS_MAX_LENGTH], int maxweapons, int maxlen)
 {
     char rebuycookiename[32];
     Handle rebuycookie;
@@ -1182,7 +1182,7 @@ void ZMarketRebuy(int client, bool autorebuy = false)
     }
     
     // Transfer cookie values into an array.
-    char rebuyweapons[Slot_MAXSIZE][WEAPONS_MAX_LENGTH];
+    char rebuyweapons[MAX_SLOTWEAPON][WEAPONS_MAX_LENGTH];
     ZMarketCookiesToArray(client, rebuyweapons, WEAPONS_SLOTS_MAX + 1, sizeof(rebuyweapons[]));
     
     // x = Weapon slot.

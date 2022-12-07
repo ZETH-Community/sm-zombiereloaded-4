@@ -65,6 +65,9 @@ enum LogTypes
  * - LogGetModuleNameString
  * - LogGetModule
  */
+
+#define MAX_LogModules 20
+
 enum LogModules
 {
     LogModule_Invalid = 0,         /** Used as return value when an error occoured.*/
@@ -86,8 +89,7 @@ enum LogModules
     LogModule_Weapons,
     LogModule_Weaponrestrict,
     LogModule_ZSpawn,
-    LogModule_ZTele,
-    LogModule_MAXSIZE
+    LogModule_ZTele
 }
 
 /**
@@ -98,4 +100,4 @@ Handle hLogModuleFilter;
 /**
  * Cache of current module filter settings. For fast and easy access.
  */
-bool LogModuleFilterCache[view_as<int>(LogModule_MAXSIZE) + 1];
+bool LogModuleFilterCache[MAX_LogModules];

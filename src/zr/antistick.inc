@@ -74,6 +74,9 @@ int g_iStartTouchHookID[MAXPLAYERS + 1] = {-1, ...};
  * U = Upper
  * D = Down
  */
+
+#define MAX_BOXBOUND 8
+
 enum AntiStickBoxBound
 {
     BoxBound_FUR = 0, /** Front upper right */
@@ -83,8 +86,7 @@ enum AntiStickBoxBound
     BoxBound_BUR,
     BoxBound_BUL,
     BoxBound_BDR,
-    BoxBound_BDL,
-    BoxBound_MAXSIZE
+    BoxBound_BDL
 }
 /**
  * Create commands related to antistick here.
@@ -263,7 +265,7 @@ public Action AntiStickSolidifyTimer(Handle timer, any client)
  * @param boundaries    Array with 'AntiStickBoxBounds' for indexes to return bounds into.
  * @param width         The width of the model box.
  */
-stock void AntiStickBuildModelBox(int client, float boundaries[BoxBound_MAXSIZE][3], float width)
+stock void AntiStickBuildModelBox(int client, float boundaries[MAX_BOXBOUND][3], float width)
 {
     float clientloc[3];
     float twistang[3];
@@ -366,7 +368,7 @@ stock void AntiStickJumpToPoint(const float vec[3], const float ang[3], float di
  * @param boundaries    The boundaries to check.
  * @param min           Return the min value instead.
  */
-stock float AntiStickGetBoxMaxBoundary(int axis, float boundaries[BoxBound_MAXSIZE][3], bool min = false)
+stock float AntiStickGetBoxMaxBoundary(int axis, float boundaries[MAX_BOXBOUND][3], bool min = false)
 {
     // Create 'outlier' with initial value of first boundary.
     float outlier = boundaries[0][axis];
@@ -398,8 +400,8 @@ stock float AntiStickGetBoxMaxBoundary(int axis, float boundaries[BoxBound_MAXSI
  */
 stock bool AntiStickIsModelBoxColliding(int client1, int client2)
 {
-    float client1modelbox[BoxBound_MAXSIZE][3];
-    float client2modelbox[BoxBound_MAXSIZE][3];
+    float client1modelbox[MAX_BOXBOUND][3];
+    float client2modelbox[MAX_BOXBOUND][3];
     
     // Build model boxes for each client.
     AntiStickBuildModelBox(client1, client1modelbox, ANTISTICK_DEFAULT_HULL_WIDTH);

@@ -331,6 +331,9 @@ enum struct ClassEditableAttributes
 /**
  * Class attributes that support multipliers.
  */
+
+#define MAX_ClassM 10
+
 enum ClassMultipliers
 {
     ClassM_Invalid = 0,
@@ -342,8 +345,7 @@ enum ClassMultipliers
     ClassM_Speed,
     ClassM_Knockback,
     ClassM_JumpHeight,
-    ClassM_JumpDistance,
-    ClassM_MAXSIZE
+    ClassM_JumpDistance
 }
 
 /**
@@ -434,7 +436,7 @@ ClassAttributes ClassPlayerCache[MAXPLAYERS + 1];
  * possible. Only attributes that support multipliers will be used, others are
  * ignored.
  */
-float ClassMultiplierCache[ZR_CLASS_TEAMCOUNT][ClassM_MAXSIZE];
+float ClassMultiplierCache[ZR_CLASS_TEAMCOUNT][MAX_ClassM];
 
 /**
  * Number of classes loaded.

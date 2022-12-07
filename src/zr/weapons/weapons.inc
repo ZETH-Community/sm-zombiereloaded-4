@@ -77,6 +77,9 @@ int g_iToolsActiveWeapon;
 /**
  * Weapon slots.
  */
+
+#define MAX_SLOTWEAPON 12
+
 enum WeaponsSlot
 {
     Slot_Invalid        = -1,   /** Invalid weapon (slot). */
@@ -88,8 +91,7 @@ enum WeaponsSlot
     Slot_Decoy			= 5,	/** Decoy Slot*/
     Slot_Explosive      = 6,    /** Explosive (c4) weapon slot. */
     Slot_NVGs           = 7,    /** NVGs (fake) equipment slot. */
-    Slot_DangerZone     = 11,   /** Dangerzone equipment slot. (CSGO only) */
-    Slot_MAXSIZE
+    Slot_DangerZone     = 11    /** Dangerzone equipment slot. (CSGO only) */
 }
 
 /**
@@ -711,7 +713,7 @@ stock int WeaponsGetZMarketPurchaseMax(int index)
 stock bool WeaponsClientHasWeapon(int client, const char[] weapon)
 {
     // Get all of client's current weapons.
-    int weapons[Slot_MAXSIZE];
+    int weapons[MAX_SLOTWEAPON];
     WeaponsGetClientWeapons(client, weapons);
     
     char classname[64];
@@ -743,7 +745,7 @@ stock bool WeaponsClientHasWeapon(int client, const char[] weapon)
  * @param weapons   The weapon index array.
  *                  -1 if no weapon in slot. 
  */
-stock void WeaponsGetClientWeapons(int client, int weapons[Slot_MAXSIZE])
+stock void WeaponsGetClientWeapons(int client, int weapons[MAX_SLOTWEAPON])
 {
     // x = Weapon slot.
     for (int x = 0; x < WEAPONS_SLOTS_MAX; x++)
@@ -828,7 +830,7 @@ stock void WeaponsRefreshClientWeapon(int client, WeaponsSlot slot)
 stock void WeaponsRemoveAllClientWeapons(int client, bool weaponsdrop)
 {
     // Get a list of all client's weapon indexes.
-    int weapons[Slot_MAXSIZE];
+    int weapons[MAX_SLOTWEAPON];
     WeaponsGetClientWeapons(client, weapons);
     
     // Loop through array slots and force drop.
@@ -878,7 +880,7 @@ stock void WeaponsRemoveAllClientWeapons(int client, bool weaponsdrop)
 stock void WeaponsRefreshAllClientWeapons(int client)
 {
     // Get a list of all client's weapon indexes.
-    int weapons[Slot_MAXSIZE];
+    int weapons[MAX_SLOTWEAPON];
     WeaponsGetClientWeapons(client, weapons);
     
     // Loop through array slots and force drop.

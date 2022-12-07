@@ -780,7 +780,7 @@ void InfectHumanToZombie(int client, int attacker = -1, bool motherinfect = fals
     }
     
     // Get a list of all client's weapon indexes.
-    int weapons[Slot_MAXSIZE];
+    int weapons[MAX_SLOTWEAPON];
     WeaponsGetClientWeapons(client, weapons);
     
     // Check if weapons drop is enabled.

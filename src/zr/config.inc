@@ -142,6 +142,9 @@ enum ConfigStructure
 /**
  * List of config files used by the plugin.
  */
+
+#define MAX_ConfigFile 5
+
 enum ConfigFile
 {
     File_Invalid = -1,  /** Invalid config file. */
@@ -150,7 +153,6 @@ enum ConfigFile
     File_Classes,       /** <sourcemod root>/configs/zr/playerclasses.txt (default) */
     File_Weapons,       /** <sourcemod root>/configs/zr/weapons.txt (default) */
     File_Hitgroups,     /** <sourcemod root>/configs/zr/hitgroups.txt (default) */
-    File_MAXSIZE
 }
 
 /**
@@ -169,7 +171,7 @@ enum struct ConfigData
 /**
  * Stores all config data.
  */
-ConfigData g_ConfigData[File_MAXSIZE];
+ConfigData g_ConfigData[MAX_ConfigFile];
 
 /**
  * Stores status of the optional ConfigList plugin.
