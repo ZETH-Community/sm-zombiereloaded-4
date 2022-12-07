@@ -45,7 +45,7 @@
 #include "zr/api/respawn.api"
 #include "zr/api/class.api"
 #include "zr/api/weapons.api"
-//#include "zr/api/knockback.api"
+#include "zr/api/knockback.api"
 
 /**
  * Initializes all main natives and forwards.
@@ -57,6 +57,7 @@ void APIInit()
     APIRespawnInit();
     APIClassInit();
     APIWeaponInit();
+    APIKnockbackInit();
 }
 
 /**

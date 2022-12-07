@@ -41,6 +41,13 @@
  */
 void KnockbackOnClientHurt(int client, int attacker, const char[] weapon, int hitgroup, int dmg_health)
 {
+    Action result = APIOnKnockbackClient(client, attacker, weapon, hitgroup, dmg_health);
+
+    if(result == Plugin_Handled || result == Plugin_Stop)
+    {
+        return;
+    }
+
     // If attacker is invalid, then stop.
     if (!ZRIsClientValid(attacker))
     {
@@ -66,7 +73,11 @@ void KnockbackOnClientHurt(int client, int attacker, const char[] weapon, int hi
     }
     
     // Get zombie knockback value.
-    float knockback = ClassGetKnockback(client);
+    float knockback;
+    float classknockback = ClassGetKnockback(client);
+    float weaponknockback;
+    float hitboxknockback;
+    float dmg_knockback;
     
     float clientloc[3];
     float attackerloc[3];
@@ -89,7 +100,7 @@ void KnockbackOnClientHurt(int client, int attacker, const char[] weapon, int hi
         GetClientEyePosition(attacker, attackerloc);
         
         // Get attackers eye angles.
-        new Float:attackerang[3];
+        float attackerang[3];
         GetClientEyeAngles(attacker, attackerang);
         
         // Calculate knockback end-vector.
@@ -100,28 +111,48 @@ void KnockbackOnClientHurt(int client, int attacker, const char[] weapon, int hi
     bool weapons = GetConVarBool(g_hCvarsList.CVAR_WEAPONS);
     if (weapons)
     {
-        new weaponindex = WeaponsNameToIndex(weapon);
+        int weaponindex = WeaponsNameToIndex(weapon);
         if (weaponindex != -1)
         {
             // Apply weapon knockback multiplier.
-            knockback *= WeaponsGetKnockback(weaponindex);
+            weaponknockback = WeaponsGetKnockback(weaponindex);
         }
+    }
+    else
+    {
+        weaponknockback = 1.0;
     }
     
     bool hitgroups = GetConVarBool(g_hCvarsList.CVAR_HITGROUPS);
     if (hitgroups)
     {
-        new hitgroupindex = HitgroupToIndex(hitgroup);
+        int hitgroupindex = HitgroupToIndex(hitgroup);
         if (hitgroupindex != -1)
         {
             // Apply hitgroup knockback multiplier.
-            knockback *= HitgroupsGetKnockback(hitgroupindex);
+            hitboxknockback = HitgroupsGetKnockback(hitgroupindex);
         }
+    }
+    else
+    {
+        hitboxknockback = 1.0;
     }
     
     // Apply damage knockback multiplier.
-    knockback *= float(dmg_health);
+    dmg_knockback = float(dmg_health);
+
+    knockback = classknockback * weaponknockback * hitboxknockback * dmg_knockback;
+
+    Action result_Ex = APIOnKnockbackClientEx(client, attacker, weapon, hitgroup, dmg_health, knockback, classknockback, weaponknockback, hitboxknockback, dmg_knockback);
+
+    if(result_Ex == Plugin_Handled || result_Ex == Plugin_Stop)
+    {
+        return;
+    }
     
+    APIOnKnockbackedClient(client, attacker, weapon, hitgroup, dmg_health);
+    APIOnKnockbackedClientEx(client, attacker, weapon, hitgroup, dmg_health, knockback, classknockback, weaponknockback, hitboxknockback, dmg_knockback);
+
     // Apply knockback.
     KnockbackSetVelocity(client, attackerloc, clientloc, knockback);
 }
