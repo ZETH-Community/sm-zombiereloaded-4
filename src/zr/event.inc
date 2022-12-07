@@ -134,11 +134,11 @@ public void EventRoundFreezeEnd(Handle event, const char[] name, bool dontBroadc
 public void EventRoundEnd(Handle event, const char[] name, bool dontBroadcast)
 {
     // Get all required event info.
-    int reason = GetEventInt(event, "reason");
+    int winner = GetEventInt(event, "winner");
     
     // Forward event to modules.
     WeaponsOnRoundEnd();
-    RoundEndOnRoundEnd(reason);
+    RoundEndOnRoundEnd(winner);
     InfectOnRoundEnd();
     SEffectsOnRoundEnd();
     RespawnOnRoundEnd();
