@@ -1,5 +1,5 @@
-# sm-zombiereloaded-3
-Zombie:Reloaded for SourceMod (all versions up to 3.x)
+# sm-zombiereloaded-4
+Zombie:Reloaded for SourceMod
 
 Q: Why this zombiereloaded existed?
 
