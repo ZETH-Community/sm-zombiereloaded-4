@@ -94,16 +94,16 @@ Action APIOnKnockbackedClientEx(int client, int attacker, const char[] weapon, i
 {
     Call_StartForward(g_hAPIFwdOnclientKnockbackedEx);
 
-    Call_PushCellRef(client);
-    Call_PushCellRef(attacker);
+    Call_PushCell(client);
+    Call_PushCell(attacker);
     Call_PushString(weapon);
-    Call_PushCellRef(hitgroup);
-    Call_PushCellRef(dmg_health);
-    Call_PushFloatRef(knockback);
-    Call_PushFloatRef(classkb);
-    Call_PushFloatRef(weaponkb);
-    Call_PushFloatRef(hitgroupkb);
-    Call_PushFloatRef(dmg_kb);
+    Call_PushCell(hitgroup);
+    Call_PushCell(dmg_health);
+    Call_PushFloat(knockback);
+    Call_PushFloat(classkb);
+    Call_PushFloat(weaponkb);
+    Call_PushFloat(hitgroupkb);
+    Call_PushFloat(dmg_kb);
 
     Call_Finish();
     return Plugin_Continue;

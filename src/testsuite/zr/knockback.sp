@@ -28,7 +28,7 @@
 #pragma semicolon 1
 #include <sourcemod>
 #include <sdktools>
-#include <sdkhooks-2.2>
+#include <sdkhooks>
 
 public Plugin:myinfo =
 {
