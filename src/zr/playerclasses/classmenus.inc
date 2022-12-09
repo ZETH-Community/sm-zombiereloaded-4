@@ -325,7 +325,16 @@ void ClassMenuSelect(int client, int teamid)
             
             // Add menu item. Using extra spaces for indention on the second line.
             Format(menuitem, sizeof(menuitem), "%s\n    %s", classname, description);
-            AddMenuItem(menu, classname, menuitem);
+
+            // Instead of remove class from menu, we just disable to let them know it exists.
+            if (!ClassFilterMatch(classindex, filter, ZR_CLASS_CACHE_MODIFIED))
+            {
+                // The class is didn't pass the filter, then disable it.
+                AddMenuItem(menu, classname, menuitem, ITEMDRAW_DISABLED);
+            }
+
+            else
+                AddMenuItem(menu, classname, menuitem);
         }
     }
     

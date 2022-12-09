@@ -841,6 +841,10 @@ stock bool ClassFilterMatch(int index, ClassFilter filter, int cachetype = ZR_CL
     char groupname[64];
     groupname[0] = 0;
     ClassGetGroup(index, groupname, sizeof(groupname), cachetype);
+
+    char sm_flags[64];
+    sm_flags[0] = 0;
+    ClassGetSM_Flags(index, sm_flags, sizeof(sm_flags), cachetype);
     
     // Check if a client is specified in the filter.
     int client = filter.ClassFilter_Client;
@@ -855,6 +859,17 @@ stock bool ClassFilterMatch(int index, ClassFilter filter, int cachetype = ZR_CL
                 return false;
             }
         }
+        
+        if (strlen(sm_flags))
+        {
+            int flags = GetUserFlagBits(client);
+            int flags_requied = ReadFlagString(sm_flags);
+
+            if (flags_requied == 0 || flags & flags_requied || flags & ADMFLAG_ROOT)
+            {
+                return true;
+            }
+        }
     }
     
     // Check if classes with groups are set to be excluded.
@@ -862,6 +877,11 @@ stock bool ClassFilterMatch(int index, ClassFilter filter, int cachetype = ZR_CL
     {
         // Exclude class if it has a group name.
         if (strlen(groupname))
+        {
+            return false;
+        }
+
+        if (strlen(sm_flags))
         {
             return false;
         }
@@ -1021,14 +1041,7 @@ stock bool ClassAddToArray(Handle array, int teamfilter = -1, ClassFilter filter
     
     // Loop through all classes.
     for (int classindex = 0; classindex < ClassCount; classindex++)
-    {
-        // Validate filter settings.
-        if (!ClassFilterMatch(classindex, filter, cachetype))
-        {
-            // The class is didn't pass the filter, skip class.
-            continue;
-        }
-        
+    {    
         // Check team filtering.
         if (hasteamfilter)
         {
