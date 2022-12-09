@@ -53,7 +53,7 @@
     #define ACTION_HANDLED      ZRTools_Handled
 #endif
 
-#define VERSION "3.1.2 ZETH-Edition"
+#define VERSION "4.1 ZETH-Edition"
 
 // Comment this line to exclude version info command. Enable this if you have
 // the repository and HG installed (Mercurial or TortoiseHG).
