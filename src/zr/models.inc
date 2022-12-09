@@ -259,11 +259,15 @@ void ModelsPrecache()
 {
     char file[PLATFORM_MAX_PATH];
 
+    bool hitboxchangerLoaded = (GetFeatureStatus(FeatureType_Native, "SetNumHitboxes") == FeatureStatus_Available);
+
     // Loop through all models, build full path and cache them.
     for (int model = 0; model < ModelCount; model++)
     {
         ModelsGetFullPath(model, file, sizeof(file));
-        PrecacheModel(file);
+        int modelindex = PrecacheModel(file);
+        if(hitboxchangerLoaded && (modelindex != 0) && (ModelData[model].Model_Team == ModelTeam_Humans))
+            SetNumHitboxes(modelindex, -1);
     }
 }
 

@@ -34,6 +34,9 @@
 #include <clientprefs>
 #include <cstrike>
 
+#undef REQUIRE_EXTENSIONS
+#include <hitboxchanger>
+
 #pragma newdecls required
 
 #if defined USE_SDKHOOKS
@@ -146,7 +149,11 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 {
     // Load API.
     APIInit();
+
+    MarkNativeAsOptional("SetNumHitboxes");
     
+    RegPluginLibrary("zombiereloaded");
+
     // Let plugin load.
     return APLRes_Success;
 }

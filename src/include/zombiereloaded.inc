@@ -36,3 +36,39 @@
 #include <zr/class.zr>
 #include <zr/weapons.zr>
 #include <zr/knockback.zr>
+
+public SharedPlugin __pl_zombiereloaded = 
+{
+	name = "zombiereloaded",
+	file = "zombiereloaded.smx",
+#if defined REQUIRE_PLUGIN
+	required = 1,
+#else
+	required = 0,
+#endif
+};
+
+
+#if !defined REQUIRE_PLUGIN
+public __pl_zombiereloaded_SetNTVOptional()
+{
+	MarkNativeAsOptional("ZR_IsValidClassIndex");
+	MarkNativeAsOptional("ZR_GetActiveClass");
+	MarkNativeAsOptional("ZR_GetHumanClass");
+	MarkNativeAsOptional("ZR_GetZombieClass");
+	MarkNativeAsOptional("ZR_SelectClientClass");
+    MarkNativeAsOptional("ZR_GetClassByName");
+    MarkNativeAsOptional("ZR_GetClassDisplayName");
+
+    MarkNativeAsOptional("ZR_IsClientZombie");
+    MarkNativeAsOptional("ZR_IsClientHuman");
+    MarkNativeAsOptional("ZR_InfectClient");
+    MarkNativeAsOptional("ZR_HumanClient");
+
+    MarkNativeAsOptional("ZR_RespawnClient");
+    MarkNativeAsOptional("ZR_SetKilledByWorld");
+    MarkNativeAsOptional("ZR_GetKilledByWorld");
+
+    MarkNativeAsOptional("ZR_PurchaseWeaponClient");
+}
+#endif
