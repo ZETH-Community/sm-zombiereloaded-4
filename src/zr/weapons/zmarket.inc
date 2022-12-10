@@ -34,6 +34,8 @@
  * @endsection
  */
 
+#define ZMARKET_MAX_COMMAND 8
+
 /**
  * Variable to store buyzone offset value.
  */
@@ -66,12 +68,19 @@ bool g_bZMarketWeaponsBought[MAXPLAYERS + 1];
 Handle g_hZMarketLoadoutCookie[WEAPONS_SLOTS_MAX + 1];
 
 /**
+ * Create Zmarket Gun Command Status
+ */
+bool g_bZmarketCommandInitialized = false;
+
+/**
  * Create commands specific to ZMarket.
  */
 void ZMarketOnCommandsCreate()
 {
     // Register ZMarket command.
     RegConsoleCmd(SAYHOOKS_KEYWORD_ZMARKET, ZMarketCommand, "Opens custom buymenu.");
+
+    g_bZmarketCommandInitialized = false;
 }
 
 void ZMarketOnCookiesCreate()
@@ -98,6 +107,91 @@ void ZMarketOnCookiesCreate()
             g_hZMarketLoadoutCookie[x] = RegClientCookie(rebuycookiename, rebuycookiedesc, CookieAccess_Protected);
         }
     }
+}
+
+void ZMarketLoad()
+{
+    if (g_bZmarketCommandInitialized)
+        return;
+
+    char zmarketcommand[CONFIG_MAX_LENGTH];
+    char weaponname[WEAPONS_MAX_LENGTH];
+
+    int size = GetArraySize(arrayWeapons);
+    for (int weaponindex = 0; weaponindex < size; weaponindex++)
+    {
+        WeaponsGetZMarketCommand(weaponindex, zmarketcommand, sizeof(zmarketcommand));
+        if (zmarketcommand[0])
+        {
+            WeaponsGetName(weaponindex, weaponname, sizeof(weaponname));
+
+            if(FindCharInString(zmarketcommand, ',') != -1)
+			{
+                char assigncommand[ZMARKET_MAX_COMMAND][CONFIG_MAX_LENGTH];
+
+                ExplodeString(zmarketcommand, ",", assigncommand, sizeof(assigncommand), sizeof(assigncommand[]))
+
+                for (int splitcommand = 0; splitcommand < ZMARKET_MAX_COMMAND; splitcommand++)
+                {
+                    TrimString(assigncommand[splitcommand]);
+
+                    if(!assigncommand[splitcommand][0])
+                        break;
+
+                    RegConsoleCmd(assigncommand[splitcommand], ZMarketBuyCommand, weaponname);
+                }
+            }
+            else
+            {
+                RegConsoleCmd(zmarketcommand, ZMarketBuyCommand, weaponname);
+            }
+        }
+    }
+
+    g_bZmarketCommandInitialized = true;
+}
+
+public Action ZMarketBuyCommand(int client, int args)
+{
+    char command[CONFIG_MAX_LENGTH];
+    char zmarketcommand[CONFIG_MAX_LENGTH];
+    char weaponname[WEAPONS_MAX_LENGTH];
+
+    GetCmdArg(0, command, sizeof(command));
+
+    int size = GetArraySize(arrayWeapons);
+    for (int weaponindex = 0; weaponindex < size; weaponindex++)
+    {
+        WeaponsGetZMarketCommand(weaponindex, zmarketcommand, sizeof(zmarketcommand));
+        if(FindCharInString(zmarketcommand, ',') != -1)
+        {
+            char assigncommand[ZMARKET_MAX_COMMAND][CONFIG_MAX_LENGTH];
+
+            ExplodeString(zmarketcommand, ",", assigncommand, sizeof(assigncommand), sizeof(assigncommand[]))
+
+            for (int splitcommand = 0; splitcommand < ZMARKET_MAX_COMMAND; splitcommand++)
+            {
+                TrimString(assigncommand[splitcommand]);
+
+                if(StrEqual(command, assigncommand[splitcommand]))
+                {
+                    WeaponsGetName(weaponindex, weaponname, sizeof(weaponname));
+                    ZMarketEquip(client, weaponname);
+                    return Plugin_Handled;
+                }
+            }
+        }
+        else
+        {
+            if(StrEqual(command, zmarketcommand))
+            {
+                WeaponsGetName(weaponindex, weaponname, sizeof(weaponname));
+                ZMarketEquip(client, weaponname);
+                return Plugin_Handled;
+            }
+        }
+    }
+    return Plugin_Handled;
 }
 
 /**

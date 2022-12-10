@@ -261,7 +261,7 @@ public int ClassMenuMainHandle(Handle menu, MenuAction action, int client, int s
  */
 void ClassMenuSelect(int client, int teamid)
 {
-    Handle menu = CreateMenu(ClassMenuSelectHandle);
+    Handle menu = CreateMenu(ClassMenuSelectHandle, MENU_ACTIONS_ALL);
     int arraycount;
     int classindex;
     

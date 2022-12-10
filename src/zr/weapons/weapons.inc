@@ -62,6 +62,7 @@ enum WeaponsData
     WEAPONS_DATA_KNOCKBACK,
     WEAPONS_DATA_ZMARKETPRICE,
     WEAPONS_DATA_ZMARKETPURCHASEMAX,
+    WEAPONS_DATA_ZMARKETCOMMAND,
     WEAPONS_DATA_RESTRICTED,
 }
 
@@ -222,6 +223,7 @@ void WeaponsLoad()
     
     // Forward event to sub-modules
     RestrictLoad();
+    ZMarketLoad();
 }
 
 /**
@@ -261,6 +263,7 @@ void WeaponsCacheData()
         char weaponentity[CONFIG_MAX_LENGTH];
         char weapontype[CONFIG_MAX_LENGTH];
         char ammotype[CONFIG_MAX_LENGTH];
+        char zmarketcommand[CONFIG_MAX_LENGTH];
         
         // General
         KvGetString(kvWeapons, "weaponentity", weaponentity, sizeof(weaponentity));
@@ -281,6 +284,7 @@ void WeaponsCacheData()
         // ZMarket (module)
         int zmarketprice = KvGetNum(kvWeapons, "zmarketprice", -1);
         int zmarketpurchasemax = KvGetNum(kvWeapons, "zmarketpurchasemax", 0);
+        KvGetString(kvWeapons, "zmarketcommand", zmarketcommand, sizeof(zmarketcommand));
         
         Handle arrayWeapon = GetArrayCell(arrayWeapons, x);
         
@@ -294,10 +298,11 @@ void WeaponsCacheData()
         PushArrayCell(arrayWeapon, ammoprice);              // Index: 7
         PushArrayCell(arrayWeapon, knockback);              // Index: 8
         PushArrayCell(arrayWeapon, zmarketprice);           // Index: 9
-        PushArrayCell(arrayWeapon, zmarketpurchasemax);    // Index: 10
+        PushArrayCell(arrayWeapon, zmarketpurchasemax);     // Index: 10
+        PushArrayString(arrayWeapon, zmarketcommand);       // Index: 11
         
         // Initialize other stored weapon info here.
-        PushArrayCell(arrayWeapon, restrictdefault);        // Index: 11
+        PushArrayCell(arrayWeapon, restrictdefault);        // Index: 12
     }
     
     // We're done with this file now, so we can close it.
@@ -471,6 +476,36 @@ stock int WeaponsNameToIndex(const char[] weapon)
         
         // If names match, then return index.
         if (StrEqual(weapon, weaponname, false))
+        {
+            return x;
+        }
+    }
+    
+    // Name doesn't exist.
+    return -1;
+}
+
+/**
+ * Find the index at which the weapon's entity name is at.
+ * 
+ * @param weapon    The weapon entity name.
+ * @return          The array index containing the given weapon name.
+ */
+stock int WeaponsEntityNameToIndex(const char[] weapon)
+{
+    char weaponentity[WEAPONS_MAX_LENGTH];
+
+    char weaponentname[64];
+    Format(weaponentname, sizeof(weaponentname), "weapon_%s", weapon);
+    
+    // x = Array index.
+    int size = GetArraySize(arrayWeapons);
+    for (int x = 0; x < size; x++)
+    {
+        WeaponsGetEntity(x, weaponentity, sizeof(weaponentity));
+        
+        // If names match, then return index.
+        if (StrEqual(weaponentname, weaponentity, false))
         {
             return x;
         }
@@ -698,6 +733,22 @@ stock int WeaponsGetZMarketPurchaseMax(int index)
     
     // Return the ZMarket price of the weapon.
     return GetArrayCell(arrayWeapon, view_as<int>(WEAPONS_DATA_ZMARKETPURCHASEMAX));
+}
+
+/**
+ * Gets the name of the command to purchase this weapon through zmarket.
+ * @param index     The weapon index.
+ * @param command   The string to return zmarketcommand in.
+ * @param maxlen    The max length of the string.
+ * @return          The max purchases of the weapon.
+ */
+stock void WeaponsGetZMarketCommand(int index, char[] command, int maxlen)
+{
+    // Get array handle of weapon at given index.
+    Handle arrayWeapon = GetArrayCell(arrayWeapons, index);
+
+    // Return the ZMarket price of the weapon.
+    GetArrayString(arrayWeapon, view_as<int>(WEAPONS_DATA_ZMARKETCOMMAND), command, maxlen);
 }
 
 /**

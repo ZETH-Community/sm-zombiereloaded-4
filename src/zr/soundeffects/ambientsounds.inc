@@ -120,7 +120,10 @@ void AmbientSoundsOnRoundStart()
 {
     // Restart ambient sound for all clients.
     for(int i = 1; i < MaxClients; i++)
-        AmbientSoundsRestart(i);
+    {
+        if (IsClientInGame(i))
+            AmbientSoundsRestart(i);
+    }
 }
 
 /**
@@ -204,6 +207,11 @@ public Action AmbientSoundsTimer(Handle timer, any client)
     if (!g_bAmbientSounds)
     {
         return Plugin_Stop;
+    }
+
+    if (!IsClientInGame(client))
+    {
+        return Plugin_Handled;
     }
     
     // Get ambient sound file.

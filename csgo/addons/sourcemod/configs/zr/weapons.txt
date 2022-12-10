@@ -52,6 +52,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"400"
+        "zmarketcommand"    "sm_glock"
     }
 
     "P2000"
@@ -79,6 +80,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"300"
+        "zmarketcommand"    "sm_p2000,sm_hkp2000"
     }
 
     "USP-S"
@@ -106,6 +108,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"500"
+        "zmarketcommand"    "sm_usp"
     }
 
     "P250"
@@ -133,7 +136,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"500"
-
+        "zmarketcommand"    "sm_p250"
     }
 
     "Deagle"
@@ -161,7 +164,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"650"
-
+        "zmarketcommand"    "sm_deagle"
     }
 
     "Elite"
@@ -189,7 +192,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"800"
-
+        "zmarketcommand"    "sm_elite"
     }
 
     "Fiveseven"
@@ -217,7 +220,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"750"
-
+        "zmarketcommand"    "sm_fiveseven,sm_57"
     }
 
     "R8 Revolver"
@@ -245,6 +248,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"800"
+        "zmarketcommand"    "sm_revolver,sm_r8"
     }
 
     "CZ75-Auto"
@@ -272,6 +276,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"800"
+        "zmarketcommand"    "sm_cz75"
     }
 
     "Tec-9"
@@ -299,6 +304,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"800"
+        "zmarketcommand"    "sm_tec9"
     }
 
     "Nova"
@@ -326,6 +332,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"1500"
+        "zmarketcommand"    "sm_nova"
     }
 
     "XM1014"
@@ -353,6 +360,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"3000"
+        "zmarketcommand"    "sm_xm,sm_xm1014"
     }
 
     "Sawed-Off"
@@ -380,6 +388,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"1500"
+        "zmarketcommand"    "sm_sawedoff"
     }
 
     "Mag-7"
@@ -407,6 +416,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"2000"	
+        "zmarketcommand"    "sm_mag7"
     }
 
     "Mac10"
@@ -434,6 +444,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"1400"
+        "zmarketcommand"    "sm_mac,sm_mac10"
     }
 
     "MP9"
@@ -461,9 +472,10 @@
         // ZMarket (module)
 
         "zmarketprice"		"1250"
+        "zmarketcommand"    "sm_mp9"
     }
 
-    "Bizon"
+    "PP-Bizon"
     {
         // General
 
@@ -488,8 +500,8 @@
         // ZMarket (module)
 
         "zmarketprice"		"1400"
+        "zmarketcommand"    "sm_bizon,sm_pp"
     }
-
 
     "MP7"
     {
@@ -516,6 +528,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"1700"
+        "zmarketcommand"    "sm_mp7"
     }
     
     "MP5-SD"
@@ -543,6 +556,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"1250"
+        "zmarketcommand"    "sm_mp5"
     }
 
     "UMP45"
@@ -570,6 +584,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"1700"
+        "zmarketcommand"    "sm_ump,sm_ump45"
     }
 
     "P90"
@@ -597,6 +612,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"2350"
+        "zmarketcommand"    "sm_p90"
     }
 
     "Galil AR"
@@ -624,6 +640,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"2000"
+        "zmarketcommand"    "sm_galil"
     }
 
     "Famas"
@@ -651,6 +668,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"2250"
+        "zmarketcommand"    "sm_famas"
     }
 
     "AK47"
@@ -678,6 +696,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"2500"
+        "zmarketcommand"    "sm_ak,sm_ak47"
     }
 
     "M4A4"
@@ -705,6 +724,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"3100"
+        "zmarketcommand"    "sm_m4a4,sm_m4"
     }
     
     "M4A1"
@@ -732,6 +752,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"3100"
+        "zmarketcommand"    "sm_m4a1,sm_m4s,sm_m4a1s"
     }
 
     "SG556"
@@ -759,6 +780,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"3500"
+        "zmarketcommand"    "sm_sg556"
     }
 
     "AUG"
@@ -786,6 +808,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"3500"
+        "zmarketcommand"    "sm_aug"
     }
 
     "SSG 08"
@@ -813,6 +836,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"2500"
+        "zmarketcommand"    "sm_ssg,sm_ssg08,sm_scout"
     }
 
     "SCAR-20"
@@ -840,6 +864,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"5000"
+        "zmarketcommand"    "sm_scar,sm_scar20"
     }
 
     "G3SG1"
@@ -867,6 +892,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"5000"
+        "zmarketcommand"    "sm_g3sg1"
     }
 
     "AWP"
@@ -894,6 +920,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"4750"
+        "zmarketcommand"    "sm_awp"
     }
 
     "M249"
@@ -921,6 +948,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"5750"
+        "zmarketcommand"    "sm_m249
     }
 
     "Negev"
@@ -948,6 +976,7 @@
         // ZMarket (module)
 
         "zmarketprice"		"5750"
+        "zmarketcommand"    "sm_negev"
     }
 
     "Knife"
@@ -989,6 +1018,7 @@
 
         "zmarketprice"		"300"
         "zmarketpurchasemax"	"1"
+        "zmarketcommand"    "sm_he"
     }
 
     "Flashbang"
@@ -1008,6 +1038,7 @@
 
         "zmarketprice"		"200"
         "zmarketpurchasemax"	"1"
+        "zmarketcommand"    "sm_flashbang,sm_flash"
     }
 
     "Smokegrenade"
@@ -1027,6 +1058,7 @@
 
         "zmarketprice"		"300"
         "zmarketpurchasemax"	"1"
+        "zmarketcommand"    "sm_smoke"
     }
 
     "IncGrenade"
@@ -1050,6 +1082,7 @@
 
         "zmarketprice"		"850"
         "zmarketpurchasemax"	"1"
+        "zmarketcommand"    "sm_inc"
     }
 
     "Molotov"
@@ -1069,6 +1102,7 @@
 
         "zmarketprice"		"850"
         "zmarketpurchasemax"	"1"
+        "zmarketcommand"    "sm_mol,sm_molotov"
     }
 
     "Decoy"
@@ -1088,7 +1122,7 @@
 
         "zmarketprice"		"200"
         "zmarketpurchasemax"	"1"
-        "zmarketcommand"	"sm_de"
+        "zmarketcommand"	"sm_de,sm_decoy"
     }
 
     "NVGs"

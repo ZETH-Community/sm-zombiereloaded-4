@@ -77,10 +77,10 @@ Action APIOnclientPurchasedWeapon(int client, const char[] weapon, bool rebuy, b
 {
     Call_StartForward(g_hAPIFwdOnclientPurchased);
 
-    Call_PushCellRef(client);
+    Call_PushCell(client);
     Call_PushString(weapon);
-    Call_PushCellRef(rebuy);
-    Call_PushCellRef(free);
+    Call_PushCell(rebuy);
+    Call_PushCell(free);
 
     Call_Finish();
     return Plugin_Continue;

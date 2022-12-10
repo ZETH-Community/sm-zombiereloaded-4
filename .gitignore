@@ -12,3 +12,5 @@ src/topdefender.sp
 cstrike/addons/sourcemod/translations/th/zombiereloaded.phrases.txt
 src/topdefender.sp
 src/zr/kb.inc
+plugins/testconfig.smx
+src/testconfig.sp

@@ -111,11 +111,20 @@ void KnockbackOnClientHurt(int client, int attacker, const char[] weapon, int hi
     bool weapons = GetConVarBool(g_hCvarsList.CVAR_WEAPONS);
     if (weapons)
     {
-        int weaponindex = WeaponsNameToIndex(weapon);
+        char weaponname[64];
+        strcopy(weaponname, sizeof(weaponname), weapon);
+
+        int weaponindex = WeaponsEntityNameToIndex(weaponname);
+        //PrintToChat(attacker, "Weapon: %s", weaponname);
         if (weaponindex != -1)
         {
             // Apply weapon knockback multiplier.
             weaponknockback = WeaponsGetKnockback(weaponindex);
+        }
+        else
+        {
+            //PrintToChat(attacker, "No KB");
+            weaponknockback = 1.0;
         }
     }
     else
@@ -143,6 +152,8 @@ void KnockbackOnClientHurt(int client, int attacker, const char[] weapon, int hi
 
     knockback = classknockback * weaponknockback * hitboxknockback * dmg_knockback;
 
+
+    
     Action result_Ex = APIOnKnockbackClientEx(client, attacker, weapon, hitgroup, dmg_health, knockback, classknockback, weaponknockback, hitboxknockback, dmg_knockback);
 
     if(result_Ex == Plugin_Handled || result_Ex == Plugin_Stop)
