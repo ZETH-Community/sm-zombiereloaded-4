@@ -129,7 +129,7 @@
 public Plugin myinfo =
 {
     name = "Zombie:Reloaded",
-    author = "Greyscale | Richard Helgeby | Oylsister",
+    author = "Greyscale | Richard Helgeby | Oylsister | Sparky",
     description = "Infection/survival style gameplay",
     version = VERSION,
     url = "http://forums.alliedmods.net/forumdisplay.php?f=132"

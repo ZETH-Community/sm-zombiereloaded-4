@@ -1042,6 +1042,12 @@ stock bool ClassAddToArray(Handle array, int teamfilter = -1, ClassFilter filter
     // Loop through all classes.
     for (int classindex = 0; classindex < ClassCount; classindex++)
     {    
+        if (!ClassFilterMatch(classindex, filter, cachetype))
+        {
+            // The class is didn't pass the filter, skip class.
+            continue;
+        }
+
         // Check team filtering.
         if (hasteamfilter)
         {
