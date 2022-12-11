@@ -865,9 +865,9 @@ stock bool ClassFilterMatch(int index, ClassFilter filter, int cachetype = ZR_CL
             int flags = GetUserFlagBits(client);
             int flags_requied = ReadFlagString(sm_flags);
 
-            if (flags_requied == 0 || flags & flags_requied || flags & ADMFLAG_ROOT)
+            if (flags & flags_requied != flags_requied)
             {
-                return true;
+                return false;
             }
         }
     }
