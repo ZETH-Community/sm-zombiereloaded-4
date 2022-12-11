@@ -65,7 +65,7 @@ bool g_bZMarketWeaponsBought[MAXPLAYERS + 1];
 /**
  * Cookie handle array for weapon loadouts.
  */
-Handle g_hZMarketLoadoutCookie[WEAPONS_SLOTS_MAX + 1];
+Handle g_hZMarketLoadoutCookie[MAX_SLOTWEAPON];
 
 /**
  * Create Zmarket Gun Command Status
@@ -95,7 +95,7 @@ void ZMarketOnCookiesCreate()
     char rebuycookiedesc[64];
     
     // x = Weapon slot.
-    for (int x = 0; x < WEAPONS_SLOTS_MAX + 1; x++)
+    for (int x = 0; x < MAX_SLOTWEAPON; x++)
     {
         // Format cookie name and description.
         Format(rebuycookiename, sizeof(rebuycookiename), "%s_%d", ZMARKET_COOKIE_REBUY, x);
@@ -300,9 +300,15 @@ void ZMarketCheckRebuy(int client)
     // If auto-rebuy is enabled, then force client to rebuy weapons.
     if (CookiesGetClientCookieBool(client, g_hZMarketAutoRebuyCookie))
     {
-        ZMarketRebuy(client, true);
-        g_bZMarketWeaponsBought[client] = true;
+        CreateTimer(0.7, ZMarketRebuyDelay, client); 
     }
+}
+
+public Action ZMarketRebuyDelay(Handle timer, any client)
+{
+    ZMarketRebuy(client, true);
+    g_bZMarketWeaponsBought[client] = true;
+    return Plugin_Stop;
 }
 
 /**

@@ -760,6 +760,18 @@
 		"en"		"Projectile: {1}"
 	}
 
+	"Weapons menu zmarket loadout firenade"
+	{
+		"#format"	"{1:s}"
+		"en"		"Fire Nade: {1}"
+	}
+
+	"Weapons menu zmarket loadout decoy"
+	{
+		"#format"	"{1:s}"
+		"en"		"Decoy: {1}"
+	}
+
 	"Weapons menu zmarket loadout explosive"
 	{
 		"#format"	"{1:s}"
