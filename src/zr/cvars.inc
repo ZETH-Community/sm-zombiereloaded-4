@@ -79,6 +79,7 @@ enum struct CvarsList
     Handle CVAR_WEAPONS_ZMARKET_BUYZONE;
     Handle CVAR_WEAPONS_ZMARKET_REBUY;
     Handle CVAR_WEAPONS_ZMARKET_REBUY_AUTO;
+    Handle CVAR_WEAPONS_ZMARKET_FREE_REBUY;
     Handle CVAR_HITGROUPS;
     Handle CVAR_DAMAGE_HITGROUPS;
     Handle CVAR_DAMAGE_BLOCK_FF;
@@ -296,11 +297,12 @@ void CvarsCreate()
     g_hCvarsList.CVAR_WEAPONS_RESTRICT_ENDEQUIP        =    CreateConVar("zr_weapons_restrict_endequip",   "1",    "Restricts zombies from picking up weapons after the round has ended but before the next round has begun.");
     
     // ZMarket
-    g_hCvarsList.CVAR_WEAPONS_ZMARKET                  =    CreateConVar("zr_weapons_zmarket",             "1",            "Allow player to buy from a list of weapons in the weapons config.");
-    g_hCvarsList.CVAR_WEAPONS_ZMARKET_BUYZONE          =    CreateConVar("zr_weapons_zmarket_buyzone",     "1",            "Requires player to be inside a buyzone to use ZMarket. [Dependency: zr_weapons_zmarket]");
-    g_hCvarsList.CVAR_WEAPONS_ZMARKET_REBUY            =    CreateConVar("zr_weapons_zmarket_rebuy",       "1",            "Allow players to rebuy their previous weapons. [Dependency: zr_weapons_zmarket]");
-    g_hCvarsList.CVAR_WEAPONS_ZMARKET_REBUY_AUTO       =    CreateConVar("zr_weapons_zmarket_rebuy_auto",  "1",            "Allow players to automatically rebuy their previous weapons. [Dependency: zr_weapons_zmarket&zr_weapons_zmarket_rebuy]");
-    
+    g_hCvarsList.CVAR_WEAPONS_ZMARKET               =    CreateConVar("zr_weapons_zmarket",             "1",  "Allow player to buy from a list of weapons in the weapons config.");
+    g_hCvarsList.CVAR_WEAPONS_ZMARKET_BUYZONE       =    CreateConVar("zr_weapons_zmarket_buyzone",     "1",  "Requires player to be inside a buyzone to use ZMarket. [Dependency: zr_weapons_zmarket]");
+    g_hCvarsList.CVAR_WEAPONS_ZMARKET_REBUY         =    CreateConVar("zr_weapons_zmarket_rebuy",       "1",  "Allow players to rebuy their previous weapons. [Dependency: zr_weapons_zmarket]");
+    g_hCvarsList.CVAR_WEAPONS_ZMARKET_REBUY_AUTO    =    CreateConVar("zr_weapons_zmarket_rebuy_auto",  "1",  "Allow players to automatically rebuy their previous weapons. [Dependency: zr_weapons_zmarket&zr_weapons_zmarket_rebuy]");
+    g_hCvarsList.CVAR_WEAPONS_ZMARKET_FREE_REBUY    =    CreateConVar("zr_weapons_zmarket_free_rebuy",  "0",  "Allow players to free rebuy before first infection.");
+
     
     // ===========================
     // Hitgroups (core)
