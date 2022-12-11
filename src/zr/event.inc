@@ -239,7 +239,17 @@ public void EventPlayerHurt(Handle event, const char[] name, bool dontBroadcast)
     int dmg_health = GetEventInt(event, "dmg_health");
     
     char weapon[WEAPONS_MAX_LENGTH];
-    GetEventString(event, "weapon", weapon, sizeof(weapon));
+
+    if(g_Game != Game_CSGO)
+        GetEventString(event, "weapon", weapon, sizeof(weapon));
+
+    else
+    {
+        int weaponindex = GetEntPropEnt(attacker, Prop_Send, "m_hActiveWeapon");
+        
+        int iItemDefIndex = GetEntProp(weaponindex, Prop_Send, "m_iItemDefinitionIndex");
+        CS_WeaponIDToAlias(CS_ItemDefIndexToID(iItemDefIndex), weapon, sizeof(weapon)); 
+    }
     
     // Forward event to modules.
     ClassAlphaUpdate(index);
