@@ -916,6 +916,11 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
         LogEvent(false, LogType_Error, LOG_CORE_EVENTS, LogModule_Weapons, "ZMarket Equip", "Invalid weapon (%s) selected from the ZMarket menu.", weapon);
         return false;
     }
+
+    bool zmarketfreerebuy = GetConVarBool(g_hCvarsList.CVAR_WEAPONS_ZMARKET_FREE_REBUY);
+    // If no zombies has spawned
+    if (!g_bZombieSpawned && zmarketfreerebuy)
+        free = true;
     
     // Get slot index of the weapon being purchased.
     WeaponsSlot slot = WeaponsGetSlot(weaponindex);

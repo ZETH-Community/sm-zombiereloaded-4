@@ -14,3 +14,4 @@ src/topdefender.sp
 src/zr/kb.inc
 plugins/testconfig.smx
 src/testconfig.sp
+.vscode
