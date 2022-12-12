@@ -39,6 +39,9 @@
  */
 enum struct CvarsList
 {
+    /**
+     * Logs.
+     */
     Handle CVAR_ENABLE;
     Handle CVAR_LOG;
     Handle CVAR_LOG_FLAGS;
@@ -47,12 +50,20 @@ enum struct CvarsList
     Handle CVAR_LOG_ERROR_OVERRIDE;
     Handle CVAR_LOG_PRINT_ADMINS;
     Handle CVAR_LOG_PRINT_CHAT;
+
+    /**
+     * Configs.
+     */
     Handle CVAR_CONFIG_PATH_MODELS;
     Handle CVAR_CONFIG_PATH_DOWNLOADS;
     Handle CVAR_CONFIG_PATH_CLASSES;
     Handle CVAR_CONFIG_PATH_WEAPONS;
     Handle CVAR_CONFIG_PATH_HITGROUPS;
     Handle CVAR_PERMISSIONS_USE_GROUPS;
+
+    /**
+     * Classes
+     */
     Handle CVAR_CLASSES_MENU_SPAWN;
     Handle CVAR_CLASSES_MENU_JOIN;
     Handle CVAR_CLASSES_RANDOM;
@@ -72,6 +83,10 @@ enum struct CvarsList
     Handle CVAR_CLASSES_ADMIN_SELECT;
     Handle CVAR_CLASSES_SPEED_METHOD;
     Handle CVAR_CLASSES_CSGO_KNOCKBACK_BOOST;
+
+    /**
+     * Weapons.
+     */
     Handle CVAR_WEAPONS;
     Handle CVAR_WEAPONS_RESTRICT;
     Handle CVAR_WEAPONS_RESTRICT_ENDEQUIP;
@@ -80,6 +95,10 @@ enum struct CvarsList
     Handle CVAR_WEAPONS_ZMARKET_REBUY;
     Handle CVAR_WEAPONS_ZMARKET_REBUY_AUTO;
     Handle CVAR_WEAPONS_ZMARKET_FREE_REBUY;
+
+    /**
+     * Hit Groups and damages.
+     */
     Handle CVAR_HITGROUPS;
     Handle CVAR_DAMAGE_HITGROUPS;
     Handle CVAR_DAMAGE_BLOCK_FF;
@@ -90,15 +109,31 @@ enum struct CvarsList
     Handle CVAR_DAMAGE_SUICIDE_HUMAN;
     Handle CVAR_DAMAGE_SUICIDE_CMDS;
     Handle CVAR_SUICIDE_AFTER_INFECT;
+
+    /**
+     * Sayhooks.
+     */
     Handle CVAR_SAYHOOKS_QUIET;
     Handle CVAR_SAYHOOKS_QUIET_FILTER;
     Handle CVAR_SAYHOOKS_QUIET_FLAGS;
+
+    /**
+     * Overlays.
+     */
     Handle CVAR_OVERLAYS_UPDATE_TIME;
     Handle CVAR_OVERLAYS_MIN_DXLEVEL;
+
+    /**
+     * Round end.
+     */
     Handle CVAR_ROUNDEND_OVERLAY;
     Handle CVAR_ROUNDEND_OVERLAY_ZOMBIE;
     Handle CVAR_ROUNDEND_OVERLAY_HUMAN;
     Handle CVAR_ROUNDEND_BALANCE_TEAMS;
+
+    /**
+     * Infections.
+     */
     Handle CVAR_INFECT_SPAWNTIME_MIN;
     Handle CVAR_INFECT_SPAWNTIME_MAX;
     Handle CVAR_INFECT_CONSECUTIVE_BLOCK;
@@ -119,9 +154,17 @@ enum struct CvarsList
     Handle CVAR_INFECT_SHAKE_AMP;
     Handle CVAR_INFECT_SHAKE_FREQUENCY;
     Handle CVAR_INFECT_SHAKE_DURATION;
+
+    /**
+     * Account.
+     */
     Handle CVAR_ACCOUNT_CASHFILL;
     Handle CVAR_ACCOUNT_CASHFILL_VALUE;
     Handle CVAR_ACCOUNT_CASHDMG;
+
+    /**
+     * Visual effects.
+     */
     Handle CVAR_VEFFECTS_LIGHTSTYLE;
     Handle CVAR_VEFFECTS_LIGHTSTYLE_VALUE;
     Handle CVAR_VEFFECTS_SKY;
@@ -138,11 +181,16 @@ enum struct CvarsList
     Handle CVAR_VEFFECTS_RAGDOLL_REMOVE;
     Handle CVAR_VEFFECTS_RAGDOLL_DISSOLVE;
     Handle CVAR_VEFFECTS_RAGDOLL_DELAY;
+
+    /**
+     * Sound effects.
+     */
     Handle CVAR_VOICE;
     Handle CVAR_VOICE_ZOMBIES_MUTE;
     Handle CVAR_SEFFECTS_MOAN;
     Handle CVAR_SEFFECTS_GROAN;
     Handle CVAR_SEFFECTS_DEATH;
+    Handle CVAR_SEFFECTS_COUNTDOWN;
     Handle CVAR_SEFFECTS_COMMAND_LIMIT;
     Handle CVAR_SEFFECTS_COMMAND_TIMESPAN;
     Handle CVAR_AMBIENTSOUNDS;
@@ -167,6 +215,10 @@ enum struct CvarsList
     Handle CVAR_VOL;
     Handle CVAR_VOL_UPDATE_INTERVAL;
     Handle CVAR_VOL_TRIGGER_INTERVAL;
+
+    /**
+     * ZSpawn.
+     */
     Handle CVAR_ZSPAWN;
     Handle CVAR_ZSPAWN_TEAM_OVERRIDE;
     Handle CVAR_ZSPAWN_TEAM_ZOMBIE;
@@ -174,6 +226,10 @@ enum struct CvarsList
     Handle CVAR_ZSPAWN_TIMELIMIT;
     Handle CVAR_ZSPAWN_TIMELIMIT_TIME;
     Handle CVAR_ZSPAWN_TIMELIMIT_ZOMBIE;
+
+    /**
+     * ZHP.
+     */
     Handle CVAR_ZHP;
     Handle CVAR_ZHP_DEFAULT;
 }
@@ -427,6 +483,7 @@ void CvarsCreate()
     g_hCvarsList.CVAR_SEFFECTS_MOAN                    =    CreateConVar("zr_seffects_moan",               "30.0",                     "Time between emission of a moan sound from a zombie.");
     g_hCvarsList.CVAR_SEFFECTS_GROAN                   =    CreateConVar("zr_seffects_groan",              "5",                        "The probability that a groan sound will be emitted from a zombie when shot. ['100' = 1% chance | '50' = 2% chance | '1' = 100% chance]");
     g_hCvarsList.CVAR_SEFFECTS_DEATH                   =    CreateConVar("zr_seffects_death",              "1",                        "Emit a death sound when a zombie dies.");
+    g_hCvarsList.CVAR_SEFFECTS_COUNTDOWN               =    CreateConVar("zr_seffects_countdown",          "1",                        "Emit countdown sounds when motherzombies timer start.");
     g_hCvarsList.CVAR_SEFFECTS_COMMAND_LIMIT           =    CreateConVar("zr_seffects_command_limit",      "4",                        "Number of sound commands allowed within the time span, or total limit if time span is disabled. ['0' = Disable sound command limit]");
     g_hCvarsList.CVAR_SEFFECTS_COMMAND_TIMESPAN        =    CreateConVar("zr_seffects_command_timespan",   "10",                       "Time span for sound command limiter (in seconds). ['0' = Disable time span check | positive number = Time span]");
     
