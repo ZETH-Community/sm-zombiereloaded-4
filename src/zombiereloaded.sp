@@ -346,6 +346,7 @@ public void OnClientDisconnect(int client)
     VolOnPlayerDisconnect(client);
     ImmunityOnClientDisconnect(client);
     ZTele_OnClientDisconnect(client);
+    AmbientSoundsOnClientDisconnect(client);
 }
 
 /**
