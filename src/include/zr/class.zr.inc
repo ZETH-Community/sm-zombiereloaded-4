@@ -112,7 +112,7 @@ native ClassSelectResult ZR_SelectClientClass(int client, int classIndex, bool a
  *
  * @return              Class index, or -1 if none found.
  */
-native void ZR_GetClassByName(const char[] className, int cacheType = ZR_CLASS_CACHE_MODIFIED);
+native int ZR_GetClassByName(const char[] className, int cacheType = ZR_CLASS_CACHE_MODIFIED);
 
 /**
  * Gets the class name displayed in the class menu.
@@ -124,4 +124,4 @@ native void ZR_GetClassByName(const char[] className, int cacheType = ZR_CLASS_C
  * @param cacheType     Optional. Specifies which class cache to read from.
  * @return              Number of cells written. -1 on error.
  */
-native void ZR_GetClassDisplayName(int index, char[] buffer, int maxlen, int cacheType = ZR_CLASS_CACHE_MODIFIED);
+native int ZR_GetClassDisplayName(int index, char[] buffer, int maxlen, int cacheType = ZR_CLASS_CACHE_MODIFIED);

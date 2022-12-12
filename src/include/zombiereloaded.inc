@@ -34,7 +34,7 @@
 #include <zr/infect.zr>
 #include <zr/respawn.zr>
 #include <zr/class.zr>
-#include <zr/weapons.zr>
+#include <zr/weapon.zr>
 #include <zr/knockback.zr>
 
 public SharedPlugin __pl_zombiereloaded = 
