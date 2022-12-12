@@ -59,4 +59,4 @@ forward Action ZR_OnClientPurchaseWeapon(int &client, const char[] weapon, bool 
  * @param free              Should this purchase be totally free.         
  *
  */
-forward void ZR_OnClientPurchaseWeapon(int client, const char[] weapon, bool rebuy, bool free);
+forward void ZR_OnClientPurchasedWeapon(int client, const char[] weapon, bool rebuy, bool free);
