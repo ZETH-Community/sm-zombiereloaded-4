@@ -46,6 +46,16 @@
  */
 
 /**
+ * @section Defines for min/max countdown sound file index.
+ */
+#define SOUND_COUNTDOWN_PATH "zr/countdown/%d.mp3" // %d is sound file index
+#define SOUND_COUNTDOWN_MIN 1
+#define SOUND_COUNTDOWN_MAX 10
+/**
+ * @endsection
+ */
+
+/**
  * @section Global variables to store infect timer handles.
  */
 Handle tInfect = INVALID_HANDLE;
@@ -679,9 +689,21 @@ public Action InfectCountdown(Handle timer)
         InfectStopCountdown();
         return Plugin_Stop;
     }
+
     
     // Print the countdown text to the clients.
     TranslationPrintCenterTextAll(false, "Infect countdown", RoundToNearest(length - counter));
+
+    // If countdown hit 10 then emit countdown sound
+    int countdownnumbers = RoundToNearest(length - counter);
+    if (countdownnumbers <= 10 && GetConVarBool(g_hCvarsList.CVAR_SEFFECTS_COUNTDOWN))
+    {
+        char soundpath[PLATFORM_MAX_PATH];
+        Format(soundpath, sizeof(soundpath), SOUND_COUNTDOWN_PATH, countdownnumbers);
+        PrecacheSound(soundpath);
+
+        EmitSoundToAll(soundpath, _, _, SNDLEVEL_NORMAL, _, 1.0);
+    }
     
     counter++;
     
