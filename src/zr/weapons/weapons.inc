@@ -958,3 +958,35 @@ stock bool WeaponsIsClientInBuyZone(int client)
     // Return if client is in buyzone.
     return view_as<bool>(GetEntData(client, g_iToolsInBuyZone));
 }
+
+/**
+ * Second Gives method a named item to a player. (Used for CSGO only)
+ * 
+ * @param client        The client index.
+ * @param weaponentity  Item classname.
+ * @return              Entity index on success.
+ */
+stock void GivePlayerItem2(int client, const char[] weaponentity)
+{
+    // Retrieves client's team.
+    int team = GetClientTeam(client);
+
+    // Switch client entity property team.
+    switch(team)
+    {
+        case 2:
+        {
+            SetEntProp(client, Prop_Send, "m_iTeamNum", 3);
+        }
+        case 3:
+        {
+            SetEntProp(client, Prop_Send, "m_iTeamNum", 2);
+        }
+    }
+
+    // Give player the weapon.
+    GivePlayerItem(client, weaponentity);
+
+    // Switch back entity property team to normal.
+    SetEntProp(client, Prop_Send, "m_iTeamNum", team);
+}
