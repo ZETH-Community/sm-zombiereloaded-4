@@ -1040,7 +1040,7 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
     if (!hasweapon || slot == Slot_Projectile || slot == Slot_NVGs || slot == Slot_Decoy || slot == Slot_FireGrenade)
     {
         // If the item is a projectile or NVGs, then skip.
-        if (slot != Slot_Projectile && slot != Slot_NVGs && slot != Slot_Decoy && slot != Slot_FireGrenade)
+        if (slot == Slot_Primary || slot == Slot_Secondary)
         {
             // If there is already a weapon in the slot, then force client to drop it.
             if (weapons[slot] > -1)
@@ -1056,7 +1056,18 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
         
         // Give client the weapon.
         else
-            GivePlayerItem(client, weaponentity);
+        {
+            // if its HKP2000 then give client the weapon using second method GivePlayerItem (CSGO only)
+            if(StrEqual(weaponentity, "weapon_hkp2000", false) || !hasweapon)
+            {
+                GivePlayerItem2(client, weaponentity);
+            }
+            else
+            {
+                // else give client like normal.
+                GivePlayerItem(client, weaponentity);
+            }
+        }
         
         // Update cookie with new weapon.
         ZMarketSetRebuyCookie(client, slot, weapon);
@@ -1071,7 +1082,8 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
             TranslationPrintToChat(client, "Weapons zmarket purchase", weapondisplay);
         }
     }
-    else if (!rebuy)
+    // Ammo rebuys only for CS:Source
+    else if (!rebuy && g_Game == Game_CSS)
     {
         // Get ammo type and stop if it's invalid.
         char weaponammo[WEAPONS_MAX_LENGTH];
