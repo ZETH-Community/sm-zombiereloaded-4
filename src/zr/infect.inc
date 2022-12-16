@@ -447,7 +447,7 @@ void InfectOnRoundFreezeEnd()
 /**
  * The round is ending.
  */
-void InfectOnRoundEnd()
+public Action InfectOnRoundEnd(Handle timer)
 {
     // Stop infect timers if running.
     ZREndTimer(tInfect);
@@ -459,6 +459,8 @@ void InfectOnRoundEnd()
         // Disable zombie flag on client.
         bZombie[x] = false;
     }
+
+    return Plugin_Continue;
 }
 
 /**
