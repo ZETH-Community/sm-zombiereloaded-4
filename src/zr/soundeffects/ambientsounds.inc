@@ -143,13 +143,8 @@ void AmbientSoundsOnRoundEnd()
  */
 void AmbientSoundsOnClientDisconnect(int client)
 {
-    if(tAmbientSounds[client] != INVALID_HANDLE)
-    {
-        KillTimer(tAmbientSounds[client], true);
-        tAmbientSounds[client] = INVALID_HANDLE;
-    }
-
     bAmbientSoundsIsPlaying[client] = false;
+    delete tAmbientSounds[client];
 }
 
 /**
@@ -187,12 +182,11 @@ void AmbientSoundsOnClientSpawnPost(int client)
  */
 void AmbientSoundsRestart(int client)
 {
+    if (!IsClientInGame(client))
+        return;
+
     // If timer is running, kill it.
-    if (tAmbientSounds[client] != INVALID_HANDLE)
-    {
-        KillTimer(tAmbientSounds[client]);
-        tAmbientSounds[client] = INVALID_HANDLE;
-    }
+    delete tAmbientSounds[client];
     
     // If ambience is disabled, then stop.
     if (!g_bAmbientSounds)
