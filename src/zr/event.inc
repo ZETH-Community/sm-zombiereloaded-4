@@ -139,7 +139,7 @@ public void EventRoundEnd(Handle event, const char[] name, bool dontBroadcast)
     // Forward event to modules.
     WeaponsOnRoundEnd();
     RoundEndOnRoundEnd(winner);
-    InfectOnRoundEnd();
+    CreateTimer(0.2, InfectOnRoundEnd);
     SEffectsOnRoundEnd();
     RespawnOnRoundEnd();
     ZSpawnOnRoundEnd();
