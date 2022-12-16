@@ -460,7 +460,7 @@ public Action InfectOnRoundEnd(Handle timer)
         bZombie[x] = false;
     }
 
-    return Plugin_Continue;
+    return Plugin_Handled;
 }
 
 /**
