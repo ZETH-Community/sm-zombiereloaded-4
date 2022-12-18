@@ -143,6 +143,9 @@ void AmbientSoundsOnRoundEnd()
  */
 void AmbientSoundsOnClientDisconnect(int client)
 {
+    if(IsFakeClient(client))
+        return;
+
     bAmbientSoundsIsPlaying[client] = false;
     delete tAmbientSounds[client];
 }
@@ -185,6 +188,9 @@ void AmbientSoundsRestart(int client)
     if (!IsClientInGame(client))
         return;
 
+    if (IsFakeClient(client))
+        return;
+
     // If timer is running, kill it.
     delete tAmbientSounds[client];
     
@@ -220,6 +226,11 @@ public Action AmbientSoundsTimer(Handle timer, any client)
     if (!IsClientInGame(client))
     {
         return Plugin_Handled;
+    }
+
+    if (IsFakeClient(client))
+    {
+        return Plugin_Stop;
     }
     
     // Get ambient sound file.
