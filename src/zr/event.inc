@@ -245,10 +245,17 @@ public void EventPlayerHurt(Handle event, const char[] name, bool dontBroadcast)
 
     else
     {
-        int weaponindex = GetEntPropEnt(attacker, Prop_Send, "m_hActiveWeapon");
+        if(InfectIsClientHuman(attacker))
+        {
+            int weaponindex = GetEntPropEnt(attacker, Prop_Send, "m_hActiveWeapon");
         
-        int iItemDefIndex = GetEntProp(weaponindex, Prop_Send, "m_iItemDefinitionIndex");
-        CS_WeaponIDToAlias(CS_ItemDefIndexToID(iItemDefIndex), weapon, sizeof(weapon)); 
+            int iItemDefIndex = GetEntProp(weaponindex, Prop_Send, "m_iItemDefinitionIndex");
+            CS_WeaponIDToAlias(CS_ItemDefIndexToID(iItemDefIndex), weapon, sizeof(weapon)); 
+        }
+        else
+        {
+            GetEventString(event, "weapon", weapon, sizeof(weapon));
+        }
     }
     
     // Forward event to modules.
