@@ -3,7 +3,14 @@ Zombie:Reloaded for SourceMod
 
 Q: Why this zombiereloaded existed?
 
-A: This version of zr plugin is mean to be remain original as much as possible (with new syntax). I say that anubis contributed some how has make thing much complicated than it should be. Second answer is because I just need something to do for making time pass faster, so this thing existed.
+A: I just wanna work on zombie:reloaded that have a new syntax. Say that srcdslab version did a pretty good job bringing zombie:reloaded with new syntax. Thanks to them it's now possible to zr plugin finally work with sourcemod 1.12 legit witout have to use old complier. 
+
+List that I have been work with.
+- ZVolume (You can change Zombie volume, Ambient Volume "separately".)
+- Knockback API
+- ZMarket API
+- Actual weapon knockback for csgo.
+- Fix last human not turn into zombie.
 
 Working with reference from these. 
 https://github.com/srcdslab/sm-plugin-zombiereloaded
