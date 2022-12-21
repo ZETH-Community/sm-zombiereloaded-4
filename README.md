@@ -12,8 +12,8 @@ List that I have been work with.
 - Actual weapon knockback for csgo.
 - Fix last human not turn into zombie.
 
-Working with reference from these. 
-https://github.com/srcdslab/sm-plugin-zombiereloaded
-https://github.com/Franc1sco/sm-zombiereloaded-3-Franug-Edition
-https://github.com/Mapeadores/ZombieReloaded
+Some Code reference from these. 
+- https://github.com/srcdslab/sm-plugin-zombiereloaded
+- https://github.com/Franc1sco/sm-zombiereloaded-3-Franug-Edition
+- https://github.com/Mapeadores/ZombieReloaded
 
