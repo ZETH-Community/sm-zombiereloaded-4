@@ -779,7 +779,17 @@ stock bool WeaponsClientHasWeapon(int client, const char[] weapon)
         }
         
         // If the weapon's classname matches, then return true.
-        GetEdictClassname(weapons[x], classname, sizeof(classname));
+        if(g_Game == Game_CSS)
+            GetEdictClassname(weapons[x], classname, sizeof(classname));
+
+        else
+        {
+            int iItemDefIndex = GetEntProp(weapon[x], Prop_Send, "m_iItemDefinitionIndex");
+            CS_WeaponIDToAlias(CS_ItemDefIndexToID(iItemDefIndex), classname, sizeof(classname));
+
+            Format(classname, sizeof(classname), "weapon_%s", classname);       
+        }
+
         if (StrEqual(weapon, classname, false))
         {
             return true;
