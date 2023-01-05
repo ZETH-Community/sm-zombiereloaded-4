@@ -958,7 +958,8 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
     
     // Get the appropriate price of the item being purchased.
     bool hasweapon = WeaponsClientHasWeapon(client, weaponentity);
-    int itemprice = (hasweapon && slot != Slot_Projectile) ? WeaponsGetAmmoPrice(weaponindex) : WeaponsGetZMarketPrice(weaponindex);
+    bool refillable = GetConVarBool(g_hCvarsList.CVAR_WEAPONS_ZMARKET_REBUY_REFILLAMMO);
+    int itemprice = (refillable && hasweapon && slot != Slot_Projectile) ? WeaponsGetAmmoPrice(weaponindex) : WeaponsGetZMarketPrice(weaponindex);
     
     // If the weapon price is below 0, then something went wrong.
     if (itemprice < 0)
@@ -1035,9 +1036,13 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
     // Get a list of the client's current weapons.
     int weapons[MAX_SLOTWEAPON];
     WeaponsGetClientWeapons(client, weapons);
+
+    // if it's Kevlar then set kevlar
+    if (StrEqual(weaponentity, "item_kevlar"))
+        SetEntProp(client, Prop_Send, "m_ArmorValue", 100);
     
     // Check if client is buying the weapon or ammo for it.
-    if (!hasweapon || slot == Slot_Projectile || slot == Slot_NVGs || slot == Slot_Decoy || slot == Slot_FireGrenade)
+    if (!refillable)
     {
         // If the item is a projectile or NVGs, then skip.
         if (slot == Slot_Primary || slot == Slot_Secondary)
@@ -1049,10 +1054,6 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
                 WeaponsForceClientDrop(client, weapons[slot]);
             }
         }
-
-        // if it's Kevlar then set kevlar
-        if (StrEqual(weaponentity, "item_kevlar"))
-            SetEntProp(client, Prop_Send, "m_ArmorValue", 100);
         
         // Give client the weapon.
         else
@@ -1083,7 +1084,7 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
         }
     }
     // Ammo rebuys only for CS:Source
-    else if (!rebuy && g_Game == Game_CSS)
+    else if (refillable && !rebuy)
     {
         // Get ammo type and stop if it's invalid.
         char weaponammo[WEAPONS_MAX_LENGTH];
