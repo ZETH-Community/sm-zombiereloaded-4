@@ -95,7 +95,6 @@ enum struct CvarsList
     Handle CVAR_WEAPONS_ZMARKET_REBUY;
     Handle CVAR_WEAPONS_ZMARKET_REBUY_AUTO;
     Handle CVAR_WEAPONS_ZMARKET_FREE_REBUY;
-    Handle CVAR_WEAPONS_ZMARKET_REBUY_REFILLAMMO;
 
     /**
      * Hit Groups and damages.
@@ -359,7 +358,6 @@ void CvarsCreate()
     g_hCvarsList.CVAR_WEAPONS_ZMARKET_REBUY         =    CreateConVar("zr_weapons_zmarket_rebuy",       "1",  "Allow players to rebuy their previous weapons. [Dependency: zr_weapons_zmarket]");
     g_hCvarsList.CVAR_WEAPONS_ZMARKET_REBUY_AUTO    =    CreateConVar("zr_weapons_zmarket_rebuy_auto",  "1",  "Allow players to automatically rebuy their previous weapons. [Dependency: zr_weapons_zmarket&zr_weapons_zmarket_rebuy]");
     g_hCvarsList.CVAR_WEAPONS_ZMARKET_FREE_REBUY    =    CreateConVar("zr_weapons_zmarket_free_rebuy",  "0",  "Allow players to free rebuy before first infection.");
-    g_hCvarsList.CVAR_WEAPONS_ZMARKET_REBUY_REFILLAMMO  =   CreateConVar("zr_weapons_zmarket_rebuy_refillammo",  "0",  "Determine players rebuy should be ammo refill or completely replace a new gun. [0 = Give player new weapon | 1 = Refill player ammo]");
 
     
     // ===========================
