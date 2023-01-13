@@ -3,7 +3,7 @@ Zombie:Reloaded for SourceMod
 
 Q: Why this zombiereloaded existed?
 
-A: I just wanna work on zombie:reloaded that have a new syntax. Say that srcdslab version did a pretty good job bringing zombie:reloaded with new syntax. Thanks to them it's now possible to zr plugin finally work with sourcemod 1.12 legit witout have to use old complier. 
+A: I just wanna work on my version of zombie:reloaded and have a new syntax. Srcdslab version did a pretty good job bringing zombie:reloaded with new syntax. Thanks to them it's now possible to zr plugin finally work with sourcemod 1.12 legit witout have to use old complier. 
 
 ### List that I have been work so far.
 - ZVolume (You can change Zombie volume, Ambient Volume "separately".) 
