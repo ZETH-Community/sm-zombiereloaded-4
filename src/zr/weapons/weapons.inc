@@ -784,7 +784,7 @@ stock bool WeaponsClientHasWeapon(int client, const char[] weapon)
 
         else
         {
-            int iItemDefIndex = GetEntProp(weapon[x], Prop_Send, "m_iItemDefinitionIndex");
+            int iItemDefIndex = GetEntProp(weapons[x], Prop_Send, "m_iItemDefinitionIndex");
             CS_WeaponIDToAlias(CS_ItemDefIndexToID(iItemDefIndex), classname, sizeof(classname));
 
             Format(classname, sizeof(classname), "weapon_%s", classname);       
