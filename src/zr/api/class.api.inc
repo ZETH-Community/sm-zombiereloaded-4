@@ -39,7 +39,9 @@ void APIClassInit()
     CreateNative("ZR_GetZombieClass", APIGetZombieClass);
     CreateNative("ZR_SelectClientClass", APISelectClientClass);
     CreateNative("ZR_GetClassByName", APIGetClassByName);
+    CreateNative("ZR_GetClassByIdentifier", APIGetClassByIdentifier);
     CreateNative("ZR_GetClassDisplayName", APIGetClassDisplayName);
+    CreateNative("ZR_GetClassIdentifier", APIGetClassIdentifier);
 }
 
 /**
@@ -152,6 +154,33 @@ public int APIGetClassByName(Handle plugin, int numParams)
 }
 
 /**
+ * Native call function (ZR_GetClassByIdentifier)
+ *
+ * native int ZR_GetClassByIdentifier(const char[] classIdent, int cacheType = ZR_CLASS_CACHE_MODIFIED);
+ */
+public int APIGetClassByIdentifier(Handle plugin, int numParams)
+{
+    char classIdent[64];
+    classIdent[0] = 0;
+
+    // Get class name.
+    if (GetNativeString(1, classIdent, sizeof(classIdent)) != SP_ERROR_NONE)
+    {
+        ThrowNativeError(SP_ERROR_NATIVE, "Unexpected error when reading classIdent parameter. Possibly corrupt or missing data.");
+        return -1;
+    }
+
+    int cacheType = GetNativeCell(2);
+    if (cacheType == ZR_CLASS_CACHE_PLAYER)
+    {
+        ThrowNativeError(SP_ERROR_NATIVE, "Invalid cache type. Player cache is not allowed in this function.");
+        return -1;
+    }
+
+    return ClassGetIndexByIdentifier(classIdent, cacheType);
+}
+
+/**
  * Native call function (ZR_GetClassDisplayName)
  *
  * native ZR_GetClassDisplayName(classIndex, String:buffer[], maxlen, cacheType = ZR_CLASS_CACHE_MODIFIED);
@@ -195,5 +224,52 @@ public int APIGetClassDisplayName(Handle plugin, int numParams)
     
     SetNativeString(2, displayName, maxlen);
     
+    return bytes;
+}
+
+/**
+ * Native call function (ZR_GetClassIdentifier)
+ *
+ * native int ZR_GetClassIdentifier(int classIndex, char[] buffer, int maxlen, int cacheType = ZR_CLASS_CACHE_MODIFIED);
+ */
+public int APIGetClassIdentifier(Handle plugin, int numParams)
+{
+    int index = GetNativeCell(1);
+    int maxlen = GetNativeCell(3);
+    int cacheType = GetNativeCell(4);
+
+    if (maxlen <= 0)
+    {
+        // No buffer size.
+        return 0;
+    }
+
+    // Validate index.
+    if (cacheType == ZR_CLASS_CACHE_PLAYER)
+    {
+        // Client index.
+        APIValidateClientIndex(index, Condition_Either);
+    }
+    else
+    {
+        // Class index.
+        if (!ClassValidateIndex(index))
+        {
+            ThrowNativeError(SP_ERROR_NATIVE, "Invalid class index. (%d)", index);
+            return 0;
+        }
+    }
+
+    char[] classIdent = new char[maxlen];
+
+    int bytes = ClassGetIdentifier(index, classIdent, maxlen, cacheType);
+    if (bytes <= 0)
+    {
+        // The class doesn't have a name for some reason. Make sure the buffer is empty.
+        classIdent[0] = 0;
+    }
+
+    SetNativeString(2, classIdent, maxlen);
+
     return bytes;
 }

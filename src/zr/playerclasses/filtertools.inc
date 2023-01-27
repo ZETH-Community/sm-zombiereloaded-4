@@ -104,6 +104,44 @@ stock bool ClassValidateTeamDefaults(int cachetype = ZR_CLASS_CACHE_ORIGINAL)
 stock int ClassValidateAttributes(int classindex, bool logErrors = false)
 {
     int flags;
+
+    // Identifier
+    char identifier[64];
+    identifier[0] = 0;
+    if (strcopy(identifier, sizeof(identifier), ClassData[classindex].Class_Identifier) < ZR_CLASS_IDENTIFIER_MIN)
+    {
+        flags += ZR_CLASS_IDENTIFIER;
+        if (logErrors)
+        {
+            LogEvent(false, LogType_Error, LOG_CORE_EVENTS, LogModule_Playerclasses, "Config Validation", "Warning: Missing identifier at index %d.", classindex);
+        }
+    }
+    else
+    {
+        // Check for reserved identifier keyworks. These aren't allowed as identifiers.
+        if (StrEqual(identifier, "all", false) ||
+            StrEqual(identifier, "humans", false) ||
+            StrEqual(identifier, "zombies", false) ||
+            StrEqual(identifier, "admins", false))
+        {
+            flags += ZR_CLASS_IDENTIFIER;
+            if (logErrors)
+            {
+                LogEvent(false, LogType_Error, LOG_CORE_EVENTS, LogModule_Playerclasses, "Config Validation", "Warning: Invalid identifier at index %d. Cannot be a team identifier: \"%s\"", classindex, identifier);
+            }
+        }
+
+        // Check for duplicate use.
+        int duplicate = ClassGetIndexByIdentifier(identifier);
+        if (duplicate >= 0)
+        {
+            flags += ZR_CLASS_IDENTIFIER;
+            if (logErrors)
+            {
+                LogEvent(false, LogType_Error, LOG_CORE_EVENTS, LogModule_Playerclasses, "Config Validation", "Warning: Invalid identifier at index %d. Already exists at index %d: \"%s\".", classindex, duplicate, identifier);
+            }
+        }
+    }
     
     // Team.
     int team = ClassData[classindex].Class_Team;
@@ -731,6 +769,42 @@ stock int ClassGetIndex(const char[] name, int cachetype = ZR_CLASS_CACHE_MODIFI
         }
     }
     
+    // The class index wasn't found.
+    return -1;
+}
+
+/**
+ * Gets the first class index of a class with the specified identifier (not a case
+ * sensitive search).
+ *
+ * @param ident     The identifier to search for.
+ * @param cachetype Optional. Specifies what class cache to read from. Options:
+ *                  ZR_CLASS_CACHE_ORIGINAL - Unchanced class data.
+ *                  ZR_CLASS_CACHE_MODIFIED (default) - Changed/newest class
+ *                  data.
+ * @return          The class index if successful, -1 otherwise.
+ */
+stock int ClassGetIndexByIdentifier(const char[] ident, int cachetype = ZR_CLASS_CACHE_MODIFIED)
+{
+    char current_ident[64];
+
+    // Check if there are no classes, or reading from player cache.
+    if (ClassCount == 0 || cachetype == ZR_CLASS_CACHE_PLAYER)
+    {
+        return -1;
+    }
+
+    // Loop through all classes.
+    for (int classindex = 0; classindex < ClassCount; classindex++)
+    {
+        // Get its ident and compare it with the specified class ident.
+        ClassGetIdentifier(classindex, current_ident, sizeof(current_ident), cachetype);
+        if (strcmp(ident, current_ident, false) == 0)
+        {
+            return classindex;
+        }
+    }
+
     // The class index wasn't found.
     return -1;
 }

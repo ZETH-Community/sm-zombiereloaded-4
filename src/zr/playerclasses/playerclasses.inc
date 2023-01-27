@@ -137,6 +137,7 @@
 /**
  * @section Attribute limit values. Used when validating.
  */
+#define ZR_CLASS_IDENTIFIER_MIN             1
 #define ZR_CLASS_TEAM_MIN                   0
 #define ZR_CLASS_TEAM_MAX                   2
 #define ZR_CLASS_FLAGS_MIN                  0
@@ -186,37 +187,38 @@
 /**
  * @section Class attribute flags.
  */
-#define ZR_CLASS_ENABLED                (1<<0)
-#define ZR_CLASS_TEAM                   (1<<1)
-#define ZR_CLASS_TEAM_DEFAULT           (1<<2)
-#define ZR_CLASS_FLAGS                  (1<<3)
-#define ZR_CLASS_GROUP                  (1<<4)
-#define ZR_CLASS_SM_FLAGS               (1<<5)
-#define ZR_CLASS_NAME                   (1<<6)
-#define ZR_CLASS_DESCRIPTION            (1<<7)
-#define ZR_CLASS_MODEL_PATH             (1<<8)
-#define ZR_CLASS_MODEL_SKIN_INDEX       (1<<9)
-#define ZR_CLASS_ALPHA_INITIAL          (1<<10)
-#define ZR_CLASS_ALPHA_DAMAGED          (1<<11)
-#define ZR_CLASS_ALPHA_DAMAGE           (1<<12)
-#define ZR_CLASS_OVERLAY_PATH           (1<<13)
-#define ZR_CLASS_NVGS                   (1<<14)
-#define ZR_CLASS_FOV                    (1<<15)
-#define ZR_CLASS_HAS_NAPALM             (1<<16)
-#define ZR_CLASS_NAPALM_TIME            (1<<17)
-#define ZR_CLASS_IMMUNITY_MODE          (1<<18)
-#define ZR_CLASS_IMMUNITY_AMOUNT        (1<<19)
-#define ZR_CLASS_IMMUNITY_COOLDOWN      (1<<20)
-#define ZR_CLASS_NO_FALL_DAMAGE         (1<<21)
-#define ZR_CLASS_HEALTH                 (1<<22)
-#define ZR_CLASS_HEALTH_REGEN_INTERVAL  (1<<23)
-#define ZR_CLASS_HEALTH_REGEN_AMOUNT    (1<<24)
-#define ZR_CLASS_HEALTH_INFECT_GAIN     (1<<25)
-#define ZR_CLASS_KILL_BONUS             (1<<26)
-#define ZR_CLASS_SPEED                  (1<<27)
-#define ZR_CLASS_KNOCKBACK              (1<<28)
-#define ZR_CLASS_JUMP_HEIGHT            (1<<29)
-#define ZR_CLASS_JUMP_DISTANCE          (1<<30)
+#define ZR_CLASS_IDENTIFIER             (1<<0)
+#define ZR_CLASS_ENABLED                (1<<1)
+#define ZR_CLASS_TEAM                   (1<<2)
+#define ZR_CLASS_TEAM_DEFAULT           (1<<3)
+#define ZR_CLASS_FLAGS                  (1<<4)
+#define ZR_CLASS_GROUP                  (1<<5)
+#define ZR_CLASS_SM_FLAGS               (1<<6)
+#define ZR_CLASS_NAME                   (1<<7)
+#define ZR_CLASS_DESCRIPTION            (1<<8)
+#define ZR_CLASS_MODEL_PATH             (1<<9)
+#define ZR_CLASS_MODEL_SKIN_INDEX       (1<<10)
+#define ZR_CLASS_ALPHA_INITIAL          (1<<11)
+#define ZR_CLASS_ALPHA_DAMAGED          (1<<12)
+#define ZR_CLASS_ALPHA_DAMAGE           (1<<13)
+#define ZR_CLASS_OVERLAY_PATH           (1<<14)
+#define ZR_CLASS_NVGS                   (1<<15)
+#define ZR_CLASS_FOV                    (1<<16)
+#define ZR_CLASS_HAS_NAPALM             (1<<17)
+#define ZR_CLASS_NAPALM_TIME            (1<<18)
+#define ZR_CLASS_IMMUNITY_MODE          (1<<19)
+#define ZR_CLASS_IMMUNITY_AMOUNT        (1<<20)
+#define ZR_CLASS_IMMUNITY_COOLDOWN      (1<<21)
+#define ZR_CLASS_NO_FALL_DAMAGE         (1<<22)
+#define ZR_CLASS_HEALTH                 (1<<23)
+#define ZR_CLASS_HEALTH_REGEN_INTERVAL  (1<<24)
+#define ZR_CLASS_HEALTH_REGEN_AMOUNT    (1<<25)
+#define ZR_CLASS_HEALTH_INFECT_GAIN     (1<<26)
+#define ZR_CLASS_KILL_BONUS             (1<<27)
+#define ZR_CLASS_SPEED                  (1<<28)
+#define ZR_CLASS_KNOCKBACK              (1<<29)
+#define ZR_CLASS_JUMP_HEIGHT            (1<<30)
+#define ZR_CLASS_JUMP_DISTANCE          (1<<31)
 /**
  * @endsection
  */
@@ -243,6 +245,7 @@
 enum struct ClassAttributes
 {
     /* General */
+    char Class_Identifier[64];
     bool Class_Enabled;
     int Class_Team;
     bool Class_TeamDefault;
@@ -563,6 +566,7 @@ void ClassLoad()
         LogEvent(false, LogType_Fatal, LOG_CORE_EVENTS, LogModule_Playerclasses, "Config Validation", "Can't find any classes in \"%s\"", pathclasses);
     }
     
+    char section_name[64];
     char name[64];
     char group[64];
     char sm_flags[64];
@@ -585,6 +589,10 @@ void ClassLoad()
             
             break;
         }
+
+        /* Class identifier = section name */
+        KvGetSectionName(kvClassData, section_name, sizeof(section_name));
+        strcopy(ClassData[ClassCount].Class_Identifier, 64, section_name);
         
         /* General */
         ClassData[ClassCount].Class_Enabled = ConfigKvGetStringBool(kvClassData, "enabled", ZR_CLASS_DEFAULT_ENABLED);
@@ -751,6 +759,7 @@ bool ClassReloadDataCache()
     for (int classindex = 0; classindex < ClassCount; classindex++)
     {
         /* General */
+        strcopy(ClassDataCache[classindex].Class_Identifier, 64, ClassData[classindex].Class_Identifier);
         ClassDataCache[classindex].Class_Enabled = ClassData[classindex].Class_Enabled;
         ClassDataCache[classindex].Class_Team = ClassData[classindex].Class_Team;
         ClassDataCache[classindex].Class_TeamDefault = ClassData[classindex].Class_TeamDefault;
@@ -819,6 +828,7 @@ bool ClassReloadPlayerCache(int client, int classindex, int cachetype = ZR_CLASS
         case ZR_CLASS_CACHE_ORIGINAL:
         {
             /* General */
+            strcopy(ClassPlayerCache[client].Class_Identifier, 64, ClassData[classindex].Class_Identifier);
             ClassPlayerCache[client].Class_Enabled = ClassData[classindex].Class_Enabled;
             ClassPlayerCache[client].Class_Team = ClassData[classindex].Class_Team;
             ClassPlayerCache[client].Class_TeamDefault = ClassData[classindex].Class_TeamDefault;
@@ -862,6 +872,7 @@ bool ClassReloadPlayerCache(int client, int classindex, int cachetype = ZR_CLASS
         case ZR_CLASS_CACHE_MODIFIED:
         {
             /* General */
+            strcopy(ClassPlayerCache[client].Class_Identifier, 64, ClassDataCache[classindex].Class_Identifier);
             ClassPlayerCache[client].Class_Enabled = ClassDataCache[classindex].Class_Enabled;
             ClassPlayerCache[client].Class_Team = ClassDataCache[classindex].Class_Team;
             ClassPlayerCache[client].Class_TeamDefault = ClassDataCache[classindex].Class_TeamDefault;
