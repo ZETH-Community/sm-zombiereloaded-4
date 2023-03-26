@@ -1,5 +1,5 @@
 # sm-zombiereloaded-4
-Zombie:Reloaded for SourceMod
+Zombie:Reloaded for SourceMod This version will soon no longer work on CS:GO
 
 Q: Why this zombiereloaded existed?
 
