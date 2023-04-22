@@ -208,6 +208,7 @@ enum struct CvarsList
     Handle CVAR_RESPAWN_DELAY;
     Handle CVAR_RESPAWN_TEAM_ZOMBIE;
     Handle CVAR_RESPAWN_TEAM_ZOMBIE_WORLD;
+    Handle CVAR_RESPAWN_HUMAN_TEAM_ZOMBIE_WORLD;
     Handle CVAR_NAPALM_IGNITE;
     Handle CVAR_NAPALM_TIME_RESET;
     Handle CVAR_NAPALM_DOUSE;
@@ -515,6 +516,7 @@ void CvarsCreate()
     g_hCvarsList.CVAR_RESPAWN_DELAY                    =    CreateConVar("zr_respawn_delay",               "1",    "Time after death to delay player respawn. [Dependency: zr_respawn]");
     g_hCvarsList.CVAR_RESPAWN_TEAM_ZOMBIE              =    CreateConVar("zr_respawn_team_zombie",         "1",    "Respawn player as a zombie. [Dependency: zr_respawn]");
     g_hCvarsList.CVAR_RESPAWN_TEAM_ZOMBIE_WORLD        =    CreateConVar("zr_respawn_team_zombie_world",   "1",    "Respawn player as a zombie if player was a zombie and killed by world damage. [Override: zr_respawn_team_zombie]");
+    g_hCvarsList.CVAR_RESPAWN_HUMAN_TEAM_ZOMBIE_WORLD  =    CreateConVar("zr_respawn_human_team_zombie_world", "0", "Respawn player as a zombie if player was a human and killed by world damage.");
     
     
     // ===========================

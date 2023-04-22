@@ -47,6 +47,11 @@ Handle tRespawn[MAXPLAYERS + 1];
 bool bKilledByWorld[MAXPLAYERS + 1];
 
 /**
+ * Array for flagging human who were killed by world.
+ */
+bool bHumanKilledByWorld[MAXPLAYERS + 1];
+
+/**
  * Client is joining the server.
  */ 
 void RespawnClientInit(client)
@@ -56,6 +61,7 @@ void RespawnClientInit(client)
     
     // Init bKilledByWorld for client.
     bKilledByWorld[client] = false;
+    bHumanKilledByWorld[client] = false;
 }
 
 /**
@@ -87,6 +93,12 @@ void RespawnOnClientDeath(int client, int attacker, const char[] weapon)
     {
         // Set bKilledByWorld to true if attacker is not a valid client.
         bKilledByWorld[client] = !ZRIsClientValid(attacker);
+    }
+
+    if (InfectIsClientHuman(client))
+    {
+        // Set bHumanKilledByWorld to true if attacker is not a valid client.
+        bHumanKilledByWorld[client] = !ZRIsClientValid(attacker);
     }
     
     // If timer is running, kill it.
@@ -150,7 +162,7 @@ void RespawnOnRoundEnd()
  *
  * @return      True if the player was spawned, false otherwise.
  */
-bool RespawnSpawnClient(int client, bool zombie = false, bool zombieIfSuicide = false)
+bool RespawnSpawnClient(int client, bool zombie = false, bool zombieIfSuicide = false, bool zombieIfHumanSuicide = false)
 {
     // If client isn't in-game, then stop.
     if (!IsClientInGame(client))
@@ -197,6 +209,12 @@ bool RespawnSpawnClient(int client, bool zombie = false, bool zombieIfSuicide = 
             InfectHumanToZombie(client);
             bKilledByWorld[client] = false;
         }
+        // Same above but if player is human.
+        else if (zombieIfHumanSuicide && bHumanKilledByWorld[client])
+        {
+            InfectHumanToZombie(client);
+            bHumanKilledByWorld[client] = false;
+        }
     }
     
     // Forward event to modules.
@@ -242,9 +260,12 @@ public Action RespawnTimer(Handle timer, any client)
     
     // Get whether zombies died by suicide should respawn as zombies.
     bool zombieIfSuicide = GetConVarBool(g_hCvarsList.CVAR_RESPAWN_TEAM_ZOMBIE_WORLD);
+
+    // Get whether human died by suicide should respawn as zombies.
+    bool zombieIfHumanSuicide = GetConVarBool(g_hCvarsList.CVAR_RESPAWN_HUMAN_TEAM_ZOMBIE_WORLD);
     
     // Spawn player.
-    RespawnSpawnClient(client, zombie, zombieIfSuicide);
+    RespawnSpawnClient(client, zombie, zombieIfSuicide, zombieIfHumanSuicide);
     return Plugin_Continue;
 }
 
