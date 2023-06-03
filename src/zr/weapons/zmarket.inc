@@ -1053,11 +1053,7 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
                 // Force client to drop the weapon.
                 WeaponsForceClientDrop(client, weapons[slot]);
             }
-        }
-        
-        // Give client the weapon.
-        else
-        {
+
             // if its HKP2000 then give client the weapon using second method GivePlayerItem (CSGO only)
             if(StrEqual(weaponentity, "weapon_hkp2000", false) || !hasweapon)
             {
@@ -1068,6 +1064,12 @@ stock bool ZMarketEquip(int client, const char[] weapon, bool rebuy = false, boo
                 // else give client like normal.
                 GivePlayerItem(client, weaponentity);
             }
+        }
+        
+        // Give client the weapon.
+        else
+        {
+            GivePlayerItem(client, weaponentity);
         }
         
         // Update cookie with new weapon.
