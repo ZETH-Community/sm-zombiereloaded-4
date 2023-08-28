@@ -240,10 +240,9 @@ public void EventPlayerHurt(Handle event, const char[] name, bool dontBroadcast)
     
     char weapon[WEAPONS_MAX_LENGTH];
 
-    if(g_Game != Game_CSGO)
-        GetEventString(event, "weapon", weapon, sizeof(weapon));
+    GetEventString(event, "weapon", weapon, sizeof(weapon));
 
-    else
+    if(!StrEqual("hegrenade", weapon, false) && g_Game == Game_CSGO)
     {
         if(InfectIsClientHuman(attacker))
         {
